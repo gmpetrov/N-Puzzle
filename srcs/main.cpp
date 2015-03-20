@@ -19,7 +19,17 @@ int		main(int ac, char **av)
 		std::cout << "no args" << std::endl;
 	}
 	else if (ac == 2){
-		puzzle.parse(av[1]);
+		try{
+			puzzle.parse(av[1]);
+		}
+		catch (NPuzzle::puzzle_exception e){
+			std::cout << e.what() << std::endl;
+			exit(0);
+		}
+		catch (std::exception e){
+			std::cout << e.what() << std::endl;
+			exit(0);
+		}
 	}
 	else
 		puzzle.ft_usage();

@@ -13,6 +13,7 @@
 #include "NPuzzle.hpp"
 
 NPuzzle::NPuzzle(){
+	this->_size = 0;
 	// std::cout << "CONSTRUCTOR CALLED" << std::endl;
 }
 
@@ -37,6 +38,18 @@ void		NPuzzle::ft_usage(void){
 		std::cout << "[USAGE] - ./npuzzle [map] or ./npuzzle" << std::endl;
 }
 
+void		NPuzzle::parser_check_line(std::string line){
+	char	**tab;
+
+	tab = ft_strsplit(line.c_str(), ' ');
+	for (int j = 0; tab[j] != NULL; j++){
+		for (std::string::iterator it = line.begin(); it != line.end(); it++){
+			if (!ft_isdigit(*it))
+				throw NPuzzle::puzzle_exception("Inavlid Map");
+		}
+	}
+}
+
 bool		NPuzzle::parse(char *file_to_parse){
 	char	**tab;
 	std::string line;
@@ -44,7 +57,6 @@ bool		NPuzzle::parse(char *file_to_parse){
 
 	if (file.is_open()){
 		while (getline(file, line)){
-			// std::cout << line << std::endl;
 			if (line.c_str()[0] == '#')
 				continue ;
 			else{
@@ -77,4 +89,29 @@ void		NPuzzle::free_tab(char **tab){
 		free(tab[j]);
 	}
 	free(tab);
+}
+
+/*
+**	Exceptions
+*/
+
+NPuzzle::puzzle_exception::puzzle_exception(std::string const & str) throw() : error(str){
+
+}
+
+NPuzzle::puzzle_exception::puzzle_exception(NPuzzle::puzzle_exception const & src) throw() : error(src.error){
+		*this = src;
+}
+
+NPuzzle::puzzle_exception & NPuzzle::puzzle_exception::operator=(NPuzzle::puzzle_exception const &rhs) throw(){
+	(void)rhs;
+	return *this;
+}
+
+NPuzzle::puzzle_exception::~puzzle_exception() throw(){
+
+}
+
+const char		*NPuzzle::puzzle_exception::what() const throw(){
+	return this->error.c_str();
 }

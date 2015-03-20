@@ -41,10 +41,24 @@ class NPuzzle
 		void		setSize(int size);
 
 		bool		parse(char *);
+		void		parser_check_line(std::string line);
 		std::vector<node>	map;
 		std::vector<node>	open_list;
 		std::vector<node>	closed_list;
 		void		free_tab(char **tab);
+
+		class		puzzle_exception : public std::exception{
+			public:
+				puzzle_exception(std::string const &) throw();
+				puzzle_exception(puzzle_exception const &src) throw();
+				puzzle_exception & operator=(puzzle_exception const & rhs) throw();
+				~puzzle_exception() throw();
+				virtual const char *what() const throw();
+
+				std::string			error;
+			private:
+				puzzle_exception() throw();
+		};
 	private:
 		int			_size;
 };

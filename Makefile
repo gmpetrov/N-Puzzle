@@ -15,7 +15,7 @@ SRCS	= $(shell find srcs -type f -print | grep "\.c")
 OBJS	= $(SRCS:srcs/%.cpp=srcs/.obj/%.o)
 INC		= -I includes -I libft/includes
 FLAGS	= -Wall -Wextra -Werror -pedantic
-LIB		= -L libft -lft -L /usr/X11/lib -lmlx -lXext -lX11
+LIB		= -L libft -lft
 CC		= g++ -g -std=c++11
 OBJ_DIR = srcs/.obj
 
