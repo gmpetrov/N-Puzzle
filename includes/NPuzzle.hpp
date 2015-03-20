@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:04:53 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/15 17:56:57 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/19 16:57:16 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ class NPuzzle
 		NPuzzle(const NPuzzle & src);
 		~NPuzzle(void);
 		NPuzzle &	operator=(NPuzzle const & rhs);
+		void		ft_usage(void);
 
 
 		/* GETTERS */

@@ -6,18 +6,18 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:08:25 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/15 18:09:08 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/19 16:55:36 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "NPuzzle.hpp"
 
 NPuzzle::NPuzzle(){
-	std::cout << "CONSTRUCTOR CALLED" << std::endl;
+	// std::cout << "CONSTRUCTOR CALLED" << std::endl;
 }
 
 NPuzzle::NPuzzle(int size) : _size(size){
-	std::cout << "CONSTRUCTOR CALLED : NPUZZLE OF SIZE " << size << " CONSTRUCTED" << std::endl;
+	// std::cout << "CONSTRUCTOR CALLED : NPUZZLE OF SIZE " << size << " CONSTRUCTED" << std::endl;
 }
 
 NPuzzle::NPuzzle(const NPuzzle & src){
@@ -25,12 +25,16 @@ NPuzzle::NPuzzle(const NPuzzle & src){
 }
 
 NPuzzle::~NPuzzle(void){
-	std::cout << "NPUZZLE DESTRUCTOR CALLED" << std::endl;
+	// std::cout << "NPUZZLE DESTRUCTOR CALLED" << std::endl;
 }
 
 NPuzzle &	NPuzzle::operator=(NPuzzle const & rhs){
 	this->_size = rhs.getSize();
 	return *this;
+}
+
+void		NPuzzle::ft_usage(void){
+		std::cout << "[USAGE] - ./npuzzle [map] or ./npuzzle" << std::endl;
 }
 
 bool		NPuzzle::parse(char *file_to_parse){
