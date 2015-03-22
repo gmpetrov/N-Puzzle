@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:04:53 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/20 17:29:57 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/22 15:09:43 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ class NPuzzle
 		void		ft_usage(void);
 
 		int		**parser_map;
+		int		parser_is_map;
+		int		parser_line_counter;
 
 		/* GETTERS */
 		int			getSize(void) const;
@@ -44,7 +46,7 @@ class NPuzzle
 		bool		parse(char *);
 		void		parser_check_line(std::string line);
 		void		parser_check_line_size(char **tab);
-		void		parser_save_line(std::string str);
+		void		parser_save_tile(int nb, int x, int y);
 
 		std::vector<node>	open_list;
 		std::vector<node>	closed_list;

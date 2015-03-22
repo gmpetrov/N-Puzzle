@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:08:25 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/20 18:06:24 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/22 15:26:18 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 
 NPuzzle::NPuzzle() : parser_map(NULL){
 	this->_size = -42;
+	this->parser_line_counter = 0;
 }
 
 NPuzzle::NPuzzle(int size) : parser_map(NULL), _size(size){
+	this->parser_line_counter = 0;
 }
 
 NPuzzle::NPuzzle(const NPuzzle & src){
@@ -36,21 +38,17 @@ void		NPuzzle::ft_usage(void){
 		std::cout << "[USAGE] - ./npuzzle [map] or ./npuzzle" << std::endl;
 }
 
-void		NPuzzle::parser_save_line(std::string line){
-	char	**tab;
-	// if (!this->current){
-	// 	this->current = new node(this->_size);
-	// }
+void		NPuzzle::parser_save_tile(int nb, int x, int y){
 	if (!this->parser_map){
 		this->parser_map = (int **)malloc(sizeof(int *) * this->_size);
 		for (int k = 0; k < this->_size; k++)
 			this->parser_map[k] = (int *)malloc(sizeof(int) * this->_size);
 	}
-	tab = ft_strsplit(line.c_str(), ' ');
-	for (int i = 0; tab[i] != NULL; i++){
-
-	}
-	this->free_tab(tab);
+	// std::cout << "DEBUG " << "size : " << this->_size << " x : " << x << " y : " << y << " nb : " << nb << std::endl;
+	if (x < this->_size && y < this->_size)
+		this->parser_map[y][x] = nb;
+	else
+		throw NPuzzle::puzzle_exception("Invalid Map : parser_save_tile()");
 }
 
 void		NPuzzle::parser_check_line_size(char **tab){
@@ -77,9 +75,14 @@ void		NPuzzle::parser_check_line(std::string line){
 			if (!ft_isdigit(tab[j][i]))
 				throw NPuzzle::puzzle_exception("Invalid Map");
 		}
+		if (this->parser_is_map == true)
+			this->parser_save_tile(std::atoi(tab[j]), j, this->parser_line_counter);
 	}
+	if (this->parser_is_map == true)
+		this->parser_line_counter += 1;
 	if (tab[0] && !tab[1]){
 		this->_size = ft_atoi(tab[0]);
+		this->parser_is_map = true;
 		if (this->_size < 3)
 		{
 			this->free_tab<char **>(tab);
@@ -102,6 +105,12 @@ bool		NPuzzle::parse(char *file_to_parse){
 			}
 		}
 		file.close();
+		for (int j = 0; j < this->_size; j++){
+			for (int i = 0; i < this->_size; i++){
+				std::cout << this->parser_map[j][i] << "    ";
+			}
+			std::cout << std::endl;
+		}
 		return true;
 	}
 	else{
