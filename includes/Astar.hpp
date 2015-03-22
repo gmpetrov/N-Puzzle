@@ -1,36 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Astar.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/03/15 17:07:03 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/22 16:51:18 by gmp              ###   ########.fr       */
+/*   Created: 2015/03/22 16:40:28 by gmp               #+#    #+#             */
+/*   Updated: 2015/03/22 17:07:09 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "NPuzzle.hpp"
+#ifndef ASTAR_HPP
+# define ASTAR_HPP
 
-int		main(int ac, char **av)
+# include <iostream>
+# include <fstream>
+# include <string>
+# include "node.hpp"
+
+class Astar
 {
-	NPuzzle puzzle;
-	if (ac < 2){
-		std::cout << "no args" << std::endl;
-	}
-	else if (ac == 2){
-		try{
-			puzzle.rezolve(av[1]);
-		}
-		catch (NPuzzle::puzzle_exception e){
-			std::cout << e.what() << std::endl;
-			exit(0);
-		}
-		catch (std::exception e){
-			std::cout << e.what() << std::endl;
-			exit(0);
-		}
-	}
-	else
-		puzzle.ft_usage();
-}
+	public:
+		Astar();
+		Astar(const Astar & src);
+		~Astar(void);
+		Astar &	operator=(Astar const & rhs);
+
+		void	search_moves(node *current);
+		void	find_blank(node *current, int *x, int *y);
+
+		/* GETTERS */
+
+		/* SETTERS */
+
+	private:
+		// Astar(void);
+};
+
+#endif

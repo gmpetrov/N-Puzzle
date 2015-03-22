@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:04:53 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/22 15:09:43 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/22 17:09:32 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <string>
 # include <vector>
 # include "node.hpp"
+# include "Astar.hpp"
 
 extern "C" {
 	#include "libft.h"
@@ -32,10 +33,7 @@ class NPuzzle
 		~NPuzzle(void);
 		NPuzzle &	operator=(NPuzzle const & rhs);
 		void		ft_usage(void);
-
-		int		**parser_map;
-		int		parser_is_map;
-		int		parser_line_counter;
+		void		rezolve(char *file);
 
 		/* GETTERS */
 		int			getSize(void) const;
@@ -43,10 +41,19 @@ class NPuzzle
 		/* SETTERS */
 		void		setSize(int size);
 
+		/* Parser */
 		bool		parse(char *);
 		void		parser_check_line(std::string line);
 		void		parser_check_line_size(char **tab);
 		void		parser_save_tile(int nb, int x, int y);
+		int			**parser_map;
+		int			parser_is_map;
+		int			parser_line_counter;
+		void		check_if_space_exist(void);
+
+		/* Algo */
+
+		Astar	algo;
 
 		std::vector<node>	open_list;
 		std::vector<node>	closed_list;

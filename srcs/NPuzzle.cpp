@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:08:25 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/22 15:26:18 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/22 17:11:40 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,12 @@
 NPuzzle::NPuzzle() : parser_map(NULL){
 	this->_size = -42;
 	this->parser_line_counter = 0;
+	this->current = NULL;
 }
 
 NPuzzle::NPuzzle(int size) : parser_map(NULL), _size(size){
 	this->parser_line_counter = 0;
+	this->current = NULL;
 }
 
 NPuzzle::NPuzzle(const NPuzzle & src){
@@ -26,12 +28,28 @@ NPuzzle::NPuzzle(const NPuzzle & src){
 }
 
 NPuzzle::~NPuzzle(void){
-
+	if (this->current)
+		delete this->current;
 }
 
 NPuzzle &	NPuzzle::operator=(NPuzzle const & rhs){
 	this->_size = rhs.getSize();
 	return *this;
+}
+
+void		NPuzzle::check_if_space_exist(void){
+	for (int y = 0; y < this->_size; y++){
+		for (int x = 0; x < this->_size; x++){
+			if (this->parser_map[y][x] == 0)
+				return ;
+		}
+	}
+	throw NPuzzle::puzzle_exception("Invalid Map : No empty tile, need one");
+}
+
+void		NPuzzle::rezolve(char *file){
+	this->parse(file);
+	this->algo.search_moves(this->current);
 }
 
 void		NPuzzle::ft_usage(void){
@@ -60,6 +78,7 @@ void		NPuzzle::parser_check_line_size(char **tab){
 		}
 	if (i != this->_size){
 		this->free_tab<char **>(tab);
+		// std::cout << "size = " << this->_size << std::endl;
 		throw NPuzzle::puzzle_exception("Invalid size for row");
 	}
 }
@@ -105,12 +124,8 @@ bool		NPuzzle::parse(char *file_to_parse){
 			}
 		}
 		file.close();
-		for (int j = 0; j < this->_size; j++){
-			for (int i = 0; i < this->_size; i++){
-				std::cout << this->parser_map[j][i] << "    ";
-			}
-			std::cout << std::endl;
-		}
+		this->check_if_space_exist();
+		this->current = new node(this->parser_map, this->_size);
 		return true;
 	}
 	else{

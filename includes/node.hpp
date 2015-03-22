@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:43 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/20 17:25:38 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/22 16:20:18 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,22 @@
 class node
 {
 	public:
-		node(int size);
-		node(int size,node *parent);
+		node(int  **state, int size);
+		node(int **state, int size,node *parent);
 		node(const node & src);
 		~node(void);
 		node &	operator=(node const & rhs);
 
 		node	*_parent;
 		int		cost;
-		int		**state;
+		int		**_state;
 		int		_size;
+
+		void	init_state(int **state, int size);
+		void	print_state(void);
+
+		template<typename T>
+		void		free_tab(T tab);
 
 		/* GETTERS */
 		int		getCost(void) const;
