@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:04:53 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/22 17:09:32 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/22 22:29:34 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ class NPuzzle
 
 		Astar	algo;
 
-		std::vector<node>	open_list;
+		std::vector<node *>	open_list;
 		std::vector<node>	closed_list;
 		template<typename T>
 		void		free_tab(T tab);

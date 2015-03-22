@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:08:25 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/22 17:11:40 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/22 22:37:43 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,18 @@ void		NPuzzle::check_if_space_exist(void){
 }
 
 void		NPuzzle::rezolve(char *file){
+	std::vector<node *>::iterator it;
+
 	this->parse(file);
-	this->algo.search_moves(this->current);
+	// for (int i = 0; i < 5; i++){
+		this->algo.search_moves(this->current);
+		this->open_list.insert(this->open_list.end(), algo.tmp.begin(), algo.tmp.end());
+		it = this->open_list.begin();
+		for (it = this->open_list.begin(); it != this->open_list.end(); it++){
+			(*it)->print_state();
+			std::cout << std::endl;
+		}
+	// }
 }
 
 void		NPuzzle::ft_usage(void){

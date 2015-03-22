@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:49 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/22 16:58:42 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/22 21:50:10 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,13 @@
 #include "node.hpp"
 
 node::node(int **state, int size) : _parent(NULL), cost(0), _size(size){
-	this->init_state(state, size);
+	// this->init_state(state, size);
+	this->_state = state;
 }
 
 node::node(int **state, int size, node *parent) : _parent(parent), _size(size){
-	this->init_state(state, size);
+	// this->init_state(state, size);
+	this->_state = state;
 	if (parent)
 		this->cost = parent->getCost();
 }
