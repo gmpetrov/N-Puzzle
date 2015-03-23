@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:49 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/22 22:32:45 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/23 09:36:57 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	Astar::search_moves_case_1(node *current, int x, int y){
 	tab[y - 1][x] = 0;
 	node *new_node = new node(tab, current->_size);
 	this->tmp.push_back(new_node);
-	std::cout << "case 1 possible" << std::endl;
+	// std::cout << "case 1 possible" << std::endl;
 }
 
 void	Astar::search_moves_case_2(node *current, int x, int y){
@@ -57,7 +57,7 @@ void	Astar::search_moves_case_2(node *current, int x, int y){
 	tab[y][x + 1] = 0;
 	node *new_node = new node(tab, current->_size);
 	this->tmp.push_back(new_node);
-	std::cout << "case 2 possible" << std::endl;
+	// std::cout << "case 2 possible" << std::endl;
 }
 
 void	Astar::search_moves_case_3(node *current, int x, int y){
@@ -66,7 +66,7 @@ void	Astar::search_moves_case_3(node *current, int x, int y){
 	tab[y + 1][x] = 0;
 	node *new_node = new node(tab, current->_size);
 	this->tmp.push_back(new_node);
-	std::cout << "case 3 possible" << std::endl;
+	// std::cout << "case 3 possible" << std::endl;
 }
 
 void	Astar::search_moves_case_4(node *current, int x, int y){
@@ -75,7 +75,7 @@ void	Astar::search_moves_case_4(node *current, int x, int y){
 	tab[y][x - 1] = 0;
 	node *new_node = new node(tab, current->_size);
 	this->tmp.push_back(new_node);
-	std::cout << "case 4 possible" << std::endl;
+	// std::cout << "case 4 possible" << std::endl;
 }
 
 int		**Astar::copy_state(int **state, int size)
