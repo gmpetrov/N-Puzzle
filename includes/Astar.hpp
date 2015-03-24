@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/22 16:40:28 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/23 09:44:27 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/24 09:51:05 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ class Astar
 		void	find_blank(node *current, int *x, int *y);
 		int		**copy_state(int **state, int size);
 		void	rate_node(node *node);
+		bool	is_solution(node *current);
 
 		std::vector<node *>	tmp;
 

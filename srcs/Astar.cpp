@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:49 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/23 09:36:57 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/24 10:00:38 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,3 +98,27 @@ void	Astar::find_blank(node *current, int *x, int *y){
 		}
 	}
 }
+
+// bool	Astar::is_solution(node *current){
+// 	int		counter = 1;
+// 	int		dimension = current->_size;
+
+// 	while (counter != ((current->_size * current->_size) - 1))
+// 	{
+// 		for (int x = 0; x < dimension; x++){
+// 			if (counter != current->_state[y][x])
+// 				return false;
+// 			counter++;
+// 		}
+// 		for (int v = 0; v < dimension; v++){
+// 			if (counter != current->_state[y][x])
+// 				return false;
+// 			counter++;
+// 		}
+// 		for (int x = (dimension - 1); x == 0; x--){
+// 			if (counter != current->_state[y][x])
+// 				return false;
+// 			counter++;
+// 		}
+// 	}
+// }
