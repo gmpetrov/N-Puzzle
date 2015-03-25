@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:49 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/24 10:00:38 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/25 11:40:14 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,26 +99,37 @@ void	Astar::find_blank(node *current, int *x, int *y){
 	}
 }
 
-// bool	Astar::is_solution(node *current){
-// 	int		counter = 1;
-// 	int		dimension = current->_size;
+bool	Astar::is_solution(node *current){
+	int		counter = 1;
+	int		dimension = current->_size;
 
-// 	while (counter != ((current->_size * current->_size) - 1))
-// 	{
-// 		for (int x = 0; x < dimension; x++){
-// 			if (counter != current->_state[y][x])
-// 				return false;
-// 			counter++;
-// 		}
-// 		for (int v = 0; v < dimension; v++){
-// 			if (counter != current->_state[y][x])
-// 				return false;
-// 			counter++;
-// 		}
-// 		for (int x = (dimension - 1); x == 0; x--){
-// 			if (counter != current->_state[y][x])
-// 				return false;
-// 			counter++;
-// 		}
-// 	}
-// }
+	while (counter <= ((current->_size * current->_size) - 1))
+	{
+		for (int x = current->_size - dimension; x < dimension; x++){
+			int y = current->_size - dimension;
+			if (counter != current->_state[y][x])
+				return false;
+			counter++;
+		}
+		dimension -= 1;
+		for (int v = current->_size - dimension; v <= dimension; v++){
+			int x = dimension;
+			if (counter != current->_state[v][x])
+				return false;
+			counter++;
+		}
+		for (int x = dimension - 1; x >= (current->_size - (dimension + 1)); x--){
+			int y = dimension;
+			if (counter != current->_state[y][x])
+				return false;
+			counter++;
+		}
+		for (int y = dimension - 1; y >= current->_size - dimension; y--){
+			int x = (current->_size - dimension) - 1;
+			if (counter != current->_state[y][x])
+				return false;
+			counter++;
+		}
+	}
+	return true;
+}

@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:08:25 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/22 22:37:43 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/25 11:32:16 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ NPuzzle &	NPuzzle::operator=(NPuzzle const & rhs){
 void		NPuzzle::check_if_space_exist(void){
 	for (int y = 0; y < this->_size; y++){
 		for (int x = 0; x < this->_size; x++){
+			// std::cout << this->parser_map[y][x] << std::endl;
 			if (this->parser_map[y][x] == 0)
 				return ;
 		}
@@ -54,11 +55,13 @@ void		NPuzzle::rezolve(char *file){
 	// for (int i = 0; i < 5; i++){
 		this->algo.search_moves(this->current);
 		this->open_list.insert(this->open_list.end(), algo.tmp.begin(), algo.tmp.end());
-		it = this->open_list.begin();
-		for (it = this->open_list.begin(); it != this->open_list.end(); it++){
-			(*it)->print_state();
-			std::cout << std::endl;
-		}
+		// it = this->open_list.begin();
+		// for (it = this->open_list.begin(); it != this->open_list.end(); it++){
+		// 	(*it)->print_state();
+		// 	std::cout << std::endl;
+		// }
+		std::cout << this->algo.is_solution(this->current) << std::endl;
+
 	// }
 }
 
