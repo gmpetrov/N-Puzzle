@@ -54,14 +54,17 @@ void		NPuzzle::rezolve(char *file){
 	this->parse(file);
 	while (algo.is_solution(this->current) != true){
 		this->current->print_state();
+		std::cout << std::endl;
 		this->closed_list.push_back(this->current);
 		this->algo.search_moves(this->current, this->open_list, this->closed_list);
 		this->open_list.insert(this->open_list.end(), algo.tmp.begin(), algo.tmp.end());
 		current = this->algo.best_move(this->current, this->open_list, this->closed_list);
 		this->current->_generation += 1;
-		std::cout << this->current->_rate << std::endl;
+		// std::cout << this->current->_rate << std::endl;
 	}
-}
+	std::cout << "FIND ONE" << std::endl;
+	current->print_state();
+ }
 
 void		NPuzzle::ft_usage(void){
 		std::cout << "[USAGE] - ./npuzzle [map] or ./npuzzle" << std::endl;

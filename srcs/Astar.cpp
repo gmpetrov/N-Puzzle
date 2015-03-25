@@ -242,20 +242,11 @@ void	print_it(node *node){
 	node->print_state();
 }
 
-node	*Astar::best_move(node *current, std::vector<node *>  open_list, std::vector<node *>  closed_list){
+node	*Astar::best_move(node *current, std::vector<node *> & open_list, std::vector<node *> & closed_list){
 	std::sort(open_list.begin(), open_list.end());
 	current = *open_list.begin();
-	std::cout << "current _rate = " << std::endl;
-	std::cout << current->_rate << std::endl;
-	current->print_state();
-	std::cout << "--------------" << std::endl;
-	if (open_list.size() > 7)
-		exit(0);
 	closed_list.push_back(current);
 	std::reverse(open_list.begin(), open_list.end());
 	open_list.pop_back();
-	std::cout << "+===BIG TET ===+" << std::endl;
-	for_each(open_list.begin(), open_list.end(), print_it);
-
 	return current;
 }

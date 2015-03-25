@@ -42,7 +42,7 @@ class Astar
 		int		manhattan_heuristic(node *node);
 		void	getCurrentPos(node *node, int *current_x, int *current_y, int to_find);
 		void	getGoalPos(node *node, int *goal_x, int *goal_y, int to_find);
-		node	*best_move(node *current, std::vector<node *> open_list, std::vector<node *> closed_list);
+		node	*best_move(node *current, std::vector<node *> & open_list, std::vector<node *> & closed_list);
 
 		std::vector<node *>	tmp;
 
