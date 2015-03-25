@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:04:53 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/22 22:29:34 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/25 16:04:30 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,9 @@ class NPuzzle
 
 		Astar	algo;
 
+		node		*current;
 		std::vector<node *>	open_list;
-		std::vector<node>	closed_list;
+		std::vector<node *>	closed_list;
 		template<typename T>
 		void		free_tab(T tab);
 
@@ -72,8 +73,6 @@ class NPuzzle
 			private:
 				puzzle_exception() throw();
 		};
-
-		node		*current;
 	private:
 		int			_size;
 };

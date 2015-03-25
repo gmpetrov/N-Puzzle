@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:49 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/22 21:50:10 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/25 16:56:11 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,16 @@
 node::node(int **state, int size) : _parent(NULL), cost(0), _size(size){
 	// this->init_state(state, size);
 	this->_state = state;
+	this->_generation = 0;
 }
 
 node::node(int **state, int size, node *parent) : _parent(parent), _size(size){
 	// this->init_state(state, size);
 	this->_state = state;
-	if (parent)
+	if (parent){
 		this->cost = parent->getCost();
+		this->_generation = parent->_generation;
+	}
 }
 
 node::node(const node & src){
@@ -32,6 +35,38 @@ node::node(const node & src){
 node::~node(void){
 	// if (this->_state)
 	// 	this->free_tab<int **>(this->_state);
+}
+
+bool	node::operator<(const node & rhs) const{
+	return this->_rate < rhs._rate;
+}
+
+bool	node::operator==(const node & rhs)const{
+	return this->is_equal(rhs);
+}
+
+bool	node::operator!=(const node & rhs)const{
+	return this->is_not_equal(rhs);
+}
+
+bool	node::is_equal(const node & rhs) const{
+	for (int y = 0; y < this->_size; y++){
+		for (int x = 0; x < this->_size; x++){
+			if (this->_state[y][x] != rhs._state[y][x])
+				return false;
+		}
+	}
+	return true;
+}
+
+bool	node::is_not_equal(const node & rhs) const{
+	for (int y = 0; y < this->_size; y++){
+		for (int x = 0; x < this->_size; x++){
+			if (this->_state[y][x] != rhs._state[y][x])
+				return true;
+		}
+	}
+	return false;
 }
 
 void	node::init_state(int **state, int size){

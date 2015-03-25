@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:08:25 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/25 11:32:16 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/25 16:55:46 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,17 +52,22 @@ void		NPuzzle::rezolve(char *file){
 	std::vector<node *>::iterator it;
 
 	this->parse(file);
-	// for (int i = 0; i < 5; i++){
-		this->algo.search_moves(this->current);
+	// node *test = new node(this->current->_state, this->current->_size);
+	// std::cout << "TEST ==" << std::endl;
+	// if (*test == *this->current)
+	// 	std::cout << "true" << std::endl;
+	// else
+	// 	std::cout << "false" << std::endl;
+	// exit(0);
+	while (algo.is_solution(this->current) != true){
+		this->current->print_state();
+		this->closed_list.push_back(this->current);
+		this->algo.search_moves(this->current, this->open_list);
+		this->current = this->algo.best_move(algo.tmp);
 		this->open_list.insert(this->open_list.end(), algo.tmp.begin(), algo.tmp.end());
-		// it = this->open_list.begin();
-		// for (it = this->open_list.begin(); it != this->open_list.end(); it++){
-		// 	(*it)->print_state();
-		// 	std::cout << std::endl;
-		// }
-		std::cout << this->algo.is_solution(this->current) << std::endl;
-
-	// }
+		std::cout << this->current->_rate << std::endl;
+		this->current->_generation += 1;
+	}
 }
 
 void		NPuzzle::ft_usage(void){
@@ -75,7 +80,6 @@ void		NPuzzle::parser_save_tile(int nb, int x, int y){
 		for (int k = 0; k < this->_size; k++)
 			this->parser_map[k] = (int *)malloc(sizeof(int) * this->_size);
 	}
-	// std::cout << "DEBUG " << "size : " << this->_size << " x : " << x << " y : " << y << " nb : " << nb << std::endl;
 	if (x < this->_size && y < this->_size)
 		this->parser_map[y][x] = nb;
 	else
@@ -91,7 +95,6 @@ void		NPuzzle::parser_check_line_size(char **tab){
 		}
 	if (i != this->_size){
 		this->free_tab<char **>(tab);
-		// std::cout << "size = " << this->_size << std::endl;
 		throw NPuzzle::puzzle_exception("Invalid size for row");
 	}
 }
