@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:49 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/25 16:56:11 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/25 18:51:18 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ node &	node::operator=(node const & rhs){
 	this->_parent = rhs.getParent();
 	this->cost = rhs.getCost();
 	this->_state = rhs._state;
+	this->_rate = rhs._rate;
+	this->_generation = rhs._generation;
 	return *this;
 }
 

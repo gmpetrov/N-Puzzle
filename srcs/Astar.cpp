@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:49 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/25 17:16:35 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/25 21:48:50 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ Astar &	Astar::operator=(Astar const & rhs){
 	return *this;
 }
 
-void	Astar::search_moves(node *current, std::vector<node *>open_list){
+void	Astar::search_moves(node *current, std::vector<node *>open_list, std::vector<node *>closed_list){
 	int	x, y;
 	this->tmp.clear();
 	this->find_blank(current, &x, &y);
@@ -40,20 +40,36 @@ void	Astar::search_moves(node *current, std::vector<node *>open_list){
 		this->search_moves_case_3(current, x, y);
 	if ((x - 1) >= 0)
 		this->search_moves_case_4(current, x, y);
-	// (void)open_list;
-	this->remove_if_already_in_open_list(open_list);
+	this->remove_if_already_in_closed_list(closed_list);
+	this->remove_or_update_if_already_in_open_list(open_list);
 }
 
-void	Astar::remove_if_already_in_open_list(std::vector<node *> open_list){
+void	Astar::remove_if_already_in_closed_list(std::vector<node *> closed_list){
+	std::vector<node *>::iterator it_tmp, it_closed;
+
+	it_tmp = tmp.begin();
+	for (std::vector<node *>::iterator it_tmp = tmp.begin(); it_tmp != tmp.end(); it_tmp++){
+		for (std::vector<node *>::iterator it_closed = closed_list.begin(); it_closed != closed_list.end(); it_closed++){
+			if ((*(*it_tmp)) == (*(*it_closed))){
+				tmp.erase(it_tmp);
+				it_tmp = tmp.begin();
+				break ;
+			}
+		}
+	}
+}
+
+void	Astar::remove_or_update_if_already_in_open_list(std::vector<node *> open_list){
 	std::vector<node *>::iterator it_tmp, it_open;
 
 	it_tmp = tmp.begin();
 	for (std::vector<node *>::iterator it_tmp = tmp.begin(); it_tmp != tmp.end(); it_tmp++){
 		for (std::vector<node *>::iterator it_open = open_list.begin(); it_open != open_list.end(); it_open++){
 			if ((*(*it_tmp)) == (*(*it_open))){
-				tmp.erase(it_tmp);
-				it_tmp = tmp.begin();
-				break ;
+				if ((*(*it_open)) < (*(*it_tmp)))
+					(*(*it_open)) = (*(*it_tmp));
+				// tmp.erase(it_tmp);
+				// it_tmp = tmp.begin();
 			}
 		}
 	}
@@ -220,8 +236,26 @@ void	Astar::getGoalPos(node *node, int *goal_x, int *goal_y, int to_find){
 	}
 }
 
-node	*Astar::best_move(std::vector<node *>  open_list){
-	std::vector<node *>	tmp = open_list;
-	std::sort(tmp.begin(), tmp.end());
-	return *tmp.begin();
+void	print_it(node *node){
+	std::cout << "RATE = ";
+	std::cout << node->_rate << std::endl;
+	node->print_state();
+}
+
+node	*Astar::best_move(node *current, std::vector<node *>  open_list, std::vector<node *>  closed_list){
+	std::sort(open_list.begin(), open_list.end());
+	current = *open_list.begin();
+	std::cout << "current _rate = " << std::endl;
+	std::cout << current->_rate << std::endl;
+	current->print_state();
+	std::cout << "--------------" << std::endl;
+	if (open_list.size() > 7)
+		exit(0);
+	closed_list.push_back(current);
+	std::reverse(open_list.begin(), open_list.end());
+	open_list.pop_back();
+	std::cout << "+===BIG TET ===+" << std::endl;
+	for_each(open_list.begin(), open_list.end(), print_it);
+
+	return current;
 }

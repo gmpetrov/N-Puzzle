@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:08:25 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/25 16:55:46 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/25 21:29:58 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,21 +52,14 @@ void		NPuzzle::rezolve(char *file){
 	std::vector<node *>::iterator it;
 
 	this->parse(file);
-	// node *test = new node(this->current->_state, this->current->_size);
-	// std::cout << "TEST ==" << std::endl;
-	// if (*test == *this->current)
-	// 	std::cout << "true" << std::endl;
-	// else
-	// 	std::cout << "false" << std::endl;
-	// exit(0);
 	while (algo.is_solution(this->current) != true){
 		this->current->print_state();
 		this->closed_list.push_back(this->current);
-		this->algo.search_moves(this->current, this->open_list);
-		this->current = this->algo.best_move(algo.tmp);
+		this->algo.search_moves(this->current, this->open_list, this->closed_list);
 		this->open_list.insert(this->open_list.end(), algo.tmp.begin(), algo.tmp.end());
-		std::cout << this->current->_rate << std::endl;
+		current = this->algo.best_move(this->current, this->open_list, this->closed_list);
 		this->current->_generation += 1;
+		std::cout << this->current->_rate << std::endl;
 	}
 }
 
