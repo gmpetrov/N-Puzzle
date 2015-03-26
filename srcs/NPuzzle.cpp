@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:08:25 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/26 21:25:35 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/26 23:35:39 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,7 @@ const char		*NPuzzle::puzzle_exception::what() const throw(){
 **	void	NPuzzle::rezolve(char *)
 */
 
+
 void		NPuzzle::rezolve(char *file){
 	std::vector<node *>::iterator it;
 	this->parse(file);
@@ -201,6 +202,7 @@ void		NPuzzle::rezolve(char *file){
 		}
 		//for_each(this->open_list.begin(), this->closed_list.end(), print_it);
 	}
+	algo.get_path(this->current);
 	std::cout << "FIND ONE" << std::endl;
-	current->print_state();
+	// current->print_state();
  }

@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/22 16:40:28 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/26 20:30:31 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/26 23:35:56 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ class Astar
 		void	getCurrentPos(node *node, int *current_x, int *current_y, int to_find);
 		void	getGoalPos(node *node, int *goal_x, int *goal_y, int to_find);
 		node	*best_move(std::vector<node *> & open_list, std::vector<node *> & closed_list);
+		void	get_path(node *current);
 
 		std::vector<node *>	tmp;
 

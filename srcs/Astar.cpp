@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:49 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/26 21:46:40 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/26 23:43:26 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,32 +41,46 @@ void	Astar::search_moves(node *current, std::vector<node *> & open_list, std::ve
 	if ((x - 1) >= 0)
 		this->search_moves_case_4(current, x, y);
 
-	this->remove_if_already_in_closed_list(closed_list);
 	this->remove_or_update_if_already_in_open_list(open_list);
+	this->remove_if_already_in_closed_list(closed_list);
 }
 
 void	Astar::remove_if_already_in_closed_list(std::vector<node *>& closed_list){
+	bool occur = false;
 	for (std::vector<node *>::iterator it_tmp = tmp.begin(); it_tmp != tmp.end(); it_tmp++){
+		if (occur == true){
+			it_tmp = tmp.begin();
+			occur = false;
+		}
 		for (std::vector<node *>::const_iterator it_closed = closed_list.begin(); it_closed != closed_list.end(); it_closed++){
 			if ((*(*it_tmp)) == (*(*it_closed))){
 				if ((*(*it_tmp)) < (*(*it_closed))){
 					// tmp.erase(it_tmp);
 					closed_list.erase(it_closed);
+					it_closed = closed_list.begin();
+					if (it_closed == closed_list.end())
+						return;
 				}
 				else{
 					tmp.erase(it_tmp);
+					occur = true;
+					it_tmp = tmp.begin();
+					if(it_tmp == tmp.end())
+						return;
+					break ;
 				}
-				it_tmp = tmp.begin();
-				if(it_tmp == tmp.end())
-					return;
-				break ;
 			}
 		}
 	}
 }
 
 void	Astar::remove_or_update_if_already_in_open_list(std::vector<node *>& open_list){
+	bool occur = false;
 	for (std::vector<node *>::iterator it_tmp = tmp.begin(); it_tmp != tmp.end(); it_tmp++){
+		if (occur == true){
+			it_tmp = tmp.begin();
+			occur = false;
+		}
 		for (std::vector<node *>::iterator it_open = open_list.begin(); it_open != open_list.end(); it_open++){
 			if ((*(*it_tmp)) == (*(*it_open))){
 				if ((*(*it_tmp)) < (*(*it_open))){
@@ -74,8 +88,9 @@ void	Astar::remove_or_update_if_already_in_open_list(std::vector<node *>& open_l
 				}
 				delete *it_tmp;
 				tmp.erase(it_tmp);
+				occur = true;
 				it_tmp = tmp.begin();
-				if(it_tmp == tmp.end())
+				if (it_tmp == tmp.end())
 					return;
 				break ;
 			}
@@ -178,8 +193,8 @@ bool	Astar::is_solution(node *current){
 void	Astar::rate_node(node *node){
 	// int	result_heuristic = this->manhattan_heuristic(node);
 	int		result_heuristic = hamming_heuristic(node);
-	// node->_rate = result_heuristic + node->_generation;
-	node->_rate = result_heuristic;
+	node->_rate = result_heuristic + node->_generation;
+	// node->_rate = result_heuristic;
 }
 
 int		Astar::manhattan_heuristic(node *node){
@@ -294,4 +309,21 @@ node	*Astar::best_move(std::vector<node *> & open_list, std::vector<node *> & cl
 	std::reverse(open_list.begin(), open_list.end());
 	open_list.pop_back();
 	return tmp;
+}
+
+bool compare_generation(node *i, node *j) { return (i->_generation < j->_generation); }
+
+void	Astar::get_path(node *current)
+{
+	node *tmp = current;
+	std::vector<node *> path;
+	while (tmp->_parent){
+		path.push_back(tmp);
+		tmp = tmp->_parent;
+	}
+	std::sort(path.begin(), path.end(), compare_generation);
+	std::reverse(path.begin(), path.end());
+	for_each(path.begin(), path.end(), print_it);
+	std::cout << "NUMBER OF STEP" << path.size() << std::endl;
+
 }
