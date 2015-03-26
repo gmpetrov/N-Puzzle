@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/22 16:40:28 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/25 21:29:20 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/26 10:34:38 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,10 @@ class Astar
 		bool	is_solution(node *current);
 		void	rate_node(node *node);
 		int		manhattan_heuristic(node *node);
+		int		hamming_heuristic(node *node);
 		void	getCurrentPos(node *node, int *current_x, int *current_y, int to_find);
 		void	getGoalPos(node *node, int *goal_x, int *goal_y, int to_find);
-		node	*best_move(node *current, std::vector<node *> & open_list, std::vector<node *> & closed_list);
+		node	*best_move(std::vector<node *> & open_list, std::vector<node *> & closed_list);
 
 		std::vector<node *>	tmp;
 

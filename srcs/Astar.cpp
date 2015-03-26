@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:49 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/25 21:48:50 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/26 10:37:52 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ void	Astar::remove_if_already_in_closed_list(std::vector<node *> closed_list){
 		for (std::vector<node *>::iterator it_closed = closed_list.begin(); it_closed != closed_list.end(); it_closed++){
 			if ((*(*it_tmp)) == (*(*it_closed))){
 				tmp.erase(it_tmp);
+				// delete *it_tmp;
 				it_tmp = tmp.begin();
 				break ;
 			}
@@ -172,8 +173,10 @@ bool	Astar::is_solution(node *current){
 }
 
 void	Astar::rate_node(node *node){
-	int	result_heuristic = this->manhattan_heuristic(node);
-	node->_rate = result_heuristic + node->_generation;
+	// int	result_heuristic = this->manhattan_heuristic(node);
+	int		result_heuristic = hamming_heuristic(node);
+	// node->_rate = result_heuristic + node->_generation;
+	node->_rate = result_heuristic;
 }
 
 int		Astar::manhattan_heuristic(node *node){
@@ -189,6 +192,42 @@ int		Astar::manhattan_heuristic(node *node){
 		int abs1 = abs(goal_x - current_x);
 		int abs2 = abs(goal_y - current_y);
 		result += (abs1 + abs2);
+	}
+	return result;
+}
+
+int		Astar::hamming_heuristic(node *current ){
+	int		counter = 1;
+	int		dimension = current->_size;
+	int		result = 0;
+
+	while (counter <= ((current->_size * current->_size) - 1))
+	{
+		for (int x = current->_size - dimension; x < dimension; x++){
+			int y = current->_size - dimension;
+			if (counter != current->_state[y][x])
+				result += 1;
+			counter++;
+		}
+		dimension -= 1;
+		for (int v = current->_size - dimension; v <= dimension; v++){
+			int x = dimension;
+			if (counter != current->_state[v][x])
+				result += 1;
+			counter++;
+		}
+		for (int x = dimension - 1; x >= (current->_size - (dimension + 1)); x--){
+			int y = dimension;
+			if (counter != current->_state[y][x])
+				result += 1;
+			counter++;
+		}
+		for (int y = dimension - 1; y >= current->_size - dimension; y--){
+			int x = (current->_size - dimension) - 1;
+			if (counter != current->_state[y][x])
+				result += 1;
+			counter++;
+		}
 	}
 	return result;
 }
@@ -242,11 +281,13 @@ void	print_it(node *node){
 	node->print_state();
 }
 
-node	*Astar::best_move(node *current, std::vector<node *> & open_list, std::vector<node *> & closed_list){
+node	*Astar::best_move(std::vector<node *> & open_list, std::vector<node *> & closed_list){
+	node *tmp;
+
 	std::sort(open_list.begin(), open_list.end());
-	current = *open_list.begin();
-	closed_list.push_back(current);
+	tmp = *open_list.begin();
+	closed_list.push_back(tmp);
 	std::reverse(open_list.begin(), open_list.end());
 	open_list.pop_back();
-	return current;
+	return tmp;
 }

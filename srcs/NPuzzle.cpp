@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:08:25 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/25 21:29:58 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/26 10:33:03 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,24 +47,6 @@ void		NPuzzle::check_if_space_exist(void){
 	}
 	throw NPuzzle::puzzle_exception("Invalid Map : No empty tile, need one");
 }
-
-void		NPuzzle::rezolve(char *file){
-	std::vector<node *>::iterator it;
-
-	this->parse(file);
-	while (algo.is_solution(this->current) != true){
-		this->current->print_state();
-		std::cout << std::endl;
-		this->closed_list.push_back(this->current);
-		this->algo.search_moves(this->current, this->open_list, this->closed_list);
-		this->open_list.insert(this->open_list.end(), algo.tmp.begin(), algo.tmp.end());
-		current = this->algo.best_move(this->current, this->open_list, this->closed_list);
-		this->current->_generation += 1;
-		// std::cout << this->current->_rate << std::endl;
-	}
-	std::cout << "FIND ONE" << std::endl;
-	current->print_state();
- }
 
 void		NPuzzle::ft_usage(void){
 		std::cout << "[USAGE] - ./npuzzle [map] or ./npuzzle" << std::endl;
@@ -170,7 +152,7 @@ NPuzzle::puzzle_exception::puzzle_exception(std::string const & str) throw() : e
 }
 
 NPuzzle::puzzle_exception::puzzle_exception(NPuzzle::puzzle_exception const & src) throw() : error(src.error){
-		*this = src;
+	*this = src;
 }
 
 NPuzzle::puzzle_exception & NPuzzle::puzzle_exception::operator=(NPuzzle::puzzle_exception const &rhs) throw(){
@@ -184,3 +166,28 @@ NPuzzle::puzzle_exception::~puzzle_exception() throw(){
 const char		*NPuzzle::puzzle_exception::what() const throw(){
 	return this->error.c_str();
 }
+
+/*
+**	void	NPuzzle::rezolve(char *)
+*/
+
+void		NPuzzle::rezolve(char *file){
+	std::vector<node *>::iterator it;
+
+	this->parse(file);
+	this->closed_list.push_back(this->current);
+	while (algo.is_solution(this->current) != true){
+		// this->current->print_state();
+		this->algo.search_moves(this->current, this->open_list, this->closed_list);
+		this->open_list.insert(this->open_list.end(), algo.tmp.begin(), algo.tmp.end());
+		if (this->open_list.empty()){
+			std::cout << "NO SOLUTION" << std::endl;
+			exit(0);
+		}
+		current = this->algo.best_move(this->open_list, this->closed_list);
+		this->current->_generation += 1;
+		std::cout << this->current->_rate << std::endl;
+	}
+	std::cout << "FIND ONE" << std::endl;
+	current->print_state();
+ }
