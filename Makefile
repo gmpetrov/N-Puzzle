@@ -6,7 +6,7 @@
 #    By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/02/20 09:56:28 by gmp               #+#    #+#              #
-#    Updated: 2015/02/27 13:32:52 by gmp              ###   ########.fr        #
+#    Updated: 2015/03/26 16:41:35 by gmp              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ $(OBJ_DIR)/%.o: srcs/%.cpp
 
 gdb:
 	make -C libft
-	cc -g $(FLAGS) $(OBJS) -o $(NAME) $(INC) $(INC) $(LIB)
+	$(CC) -g $(FLAGS) $(OBJS) -o $(NAME) $(INC) $(INC) $(LIB)
 	gdb $(NAME)
 
 clean:

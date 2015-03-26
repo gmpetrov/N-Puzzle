@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:49 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/25 18:51:18 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/26 21:20:24 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,15 @@
 #include "node.hpp"
 
 node::node(int **state, int size) : _parent(NULL), cost(0), _size(size){
-	// this->init_state(state, size);
-	this->_state = state;
+	this->init_state(state, size);
+	// this->_state = state;
 	this->_generation = 0;
 }
 
 node::node(int **state, int size, node *parent) : _parent(parent), _size(size){
-	// this->init_state(state, size);
-	this->_state = state;
+	this->init_state(state, size);
+	// this->_state = state;
 	if (parent){
-		this->cost = parent->getCost();
 		this->_generation = parent->_generation;
 	}
 }
@@ -35,6 +34,10 @@ node::node(const node & src){
 node::~node(void){
 	// if (this->_state)
 	// 	this->free_tab<int **>(this->_state);
+}
+
+std::ostream & 	operator<<(std::ostream & o, node const & i){
+	return o << "node : { _rate = " << i._rate << ";" << " parent._rate = " << i._parent->_rate << ";" << " }" << std::endl;
 }
 
 bool	node::operator<(const node & rhs) const{
@@ -50,6 +53,10 @@ bool	node::operator!=(const node & rhs)const{
 }
 
 bool	node::is_equal(const node & rhs) const{
+
+	if(this->_size != rhs._size)
+		return false;
+
 	for (int y = 0; y < this->_size; y++){
 		for (int x = 0; x < this->_size; x++){
 			if (this->_state[y][x] != rhs._state[y][x])
@@ -87,10 +94,22 @@ void	node::print_state(void){
 	}
 }
 
+/*
+void	node::copy_state(int **state){
+	for (int j = 0; j < this->_size; j++){
+		for (int i = 0; i < this->_size; i++){
+			this->_state[j][i] = state[j][i];
+		}
+	}
+}
+*/
+
 node &	node::operator=(node const & rhs){
 	this->_parent = rhs.getParent();
 	this->cost = rhs.getCost();
-	this->_state = rhs._state;
+
+	memcpy(this->_state, rhs._state, sizeof(int *) * this->_size * this->_size);
+	//this->copy_state(rhs._state);
 	this->_rate = rhs._rate;
 	this->_generation = rhs._generation;
 	return *this;

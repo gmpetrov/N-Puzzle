@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:43 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/25 15:44:44 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/26 19:48:36 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ class node
 		bool	is_not_equal(const node & rhs) const;
 		void	init_state(int **state, int size);
 		void	print_state(void);
+		//void	copy_state(int **state);
 
 		template<typename T>
 		void		free_tab(T tab);
@@ -52,5 +53,7 @@ class node
 	private:
 		node(void);
 };
+
+std::ostream & 	operator<<(std::ostream & o, node const & i);
 
 #endif

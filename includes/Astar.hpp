@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/22 16:40:28 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/26 10:34:38 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/26 20:30:31 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <algorithm>
 # include "node.hpp"
 
+void	print_it(node *node);
+
 class Astar
 {
 	public:
@@ -28,13 +30,14 @@ class Astar
 		~Astar(void);
 		Astar &	operator=(Astar const & rhs);
 
-		void	search_moves(node *current, std::vector<node *> open_list, std::vector<node *> closed_list);
+		void	search_moves(node *current, std::vector<node *> & open_list, std::vector<node *> & closed_list);
 		void	search_moves_case_1(node *current, int x, int y);
 		void	search_moves_case_2(node *current, int x, int y);
 		void	search_moves_case_3(node *current, int x, int y);
 		void	search_moves_case_4(node *current, int x, int y);
-		void	remove_or_update_if_already_in_open_list(std::vector<node *> open_list);
-		void	remove_if_already_in_closed_list(std::vector<node *> closed_list);
+		void	remove_or_update_if_already_in_open_list(std::vector<node *>& open_list);
+		void	remove_if_already_in_closed_list(std::vector<node *>& closed_list);
+
 		void	find_blank(node *current, int *x, int *y);
 		int		**copy_state(int **state, int size);
 		bool	is_solution(node *current);

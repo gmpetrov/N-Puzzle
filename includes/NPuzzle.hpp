@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:04:53 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/25 16:04:30 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/26 21:24:54 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ class NPuzzle
 		int			parser_is_map;
 		int			parser_line_counter;
 		void		check_if_space_exist(void);
+
+		bool		success;
 
 		/* Algo */
 

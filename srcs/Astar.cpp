@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:49 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/26 10:37:52 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/26 21:46:40 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ Astar &	Astar::operator=(Astar const & rhs){
 	return *this;
 }
 
-void	Astar::search_moves(node *current, std::vector<node *>open_list, std::vector<node *>closed_list){
+void	Astar::search_moves(node *current, std::vector<node *> & open_list, std::vector<node *> & closed_list){
 	int	x, y;
 	this->tmp.clear();
 	this->find_blank(current, &x, &y);
@@ -40,37 +40,44 @@ void	Astar::search_moves(node *current, std::vector<node *>open_list, std::vecto
 		this->search_moves_case_3(current, x, y);
 	if ((x - 1) >= 0)
 		this->search_moves_case_4(current, x, y);
+
 	this->remove_if_already_in_closed_list(closed_list);
 	this->remove_or_update_if_already_in_open_list(open_list);
 }
 
-void	Astar::remove_if_already_in_closed_list(std::vector<node *> closed_list){
-	std::vector<node *>::iterator it_tmp, it_closed;
-
-	it_tmp = tmp.begin();
+void	Astar::remove_if_already_in_closed_list(std::vector<node *>& closed_list){
 	for (std::vector<node *>::iterator it_tmp = tmp.begin(); it_tmp != tmp.end(); it_tmp++){
-		for (std::vector<node *>::iterator it_closed = closed_list.begin(); it_closed != closed_list.end(); it_closed++){
+		for (std::vector<node *>::const_iterator it_closed = closed_list.begin(); it_closed != closed_list.end(); it_closed++){
 			if ((*(*it_tmp)) == (*(*it_closed))){
-				tmp.erase(it_tmp);
-				// delete *it_tmp;
+				if ((*(*it_tmp)) < (*(*it_closed))){
+					// tmp.erase(it_tmp);
+					closed_list.erase(it_closed);
+				}
+				else{
+					tmp.erase(it_tmp);
+				}
 				it_tmp = tmp.begin();
+				if(it_tmp == tmp.end())
+					return;
 				break ;
 			}
 		}
 	}
 }
 
-void	Astar::remove_or_update_if_already_in_open_list(std::vector<node *> open_list){
-	std::vector<node *>::iterator it_tmp, it_open;
-
-	it_tmp = tmp.begin();
+void	Astar::remove_or_update_if_already_in_open_list(std::vector<node *>& open_list){
 	for (std::vector<node *>::iterator it_tmp = tmp.begin(); it_tmp != tmp.end(); it_tmp++){
 		for (std::vector<node *>::iterator it_open = open_list.begin(); it_open != open_list.end(); it_open++){
 			if ((*(*it_tmp)) == (*(*it_open))){
-				if ((*(*it_open)) < (*(*it_tmp)))
+				if ((*(*it_tmp)) < (*(*it_open))){
 					(*(*it_open)) = (*(*it_tmp));
-				// tmp.erase(it_tmp);
-				// it_tmp = tmp.begin();
+				}
+				delete *it_tmp;
+				tmp.erase(it_tmp);
+				it_tmp = tmp.begin();
+				if(it_tmp == tmp.end())
+					return;
+				break ;
 			}
 		}
 	}
@@ -83,7 +90,6 @@ void	Astar::search_moves_case_1(node *current, int x, int y){
 	node *new_node = new node(tab, current->_size, current);
 	this->rate_node(new_node);
 	this->tmp.push_back(new_node);
-	// std::cout << "case 1 possible" << std::endl;
 }
 
 void	Astar::search_moves_case_2(node *current, int x, int y){
@@ -93,7 +99,6 @@ void	Astar::search_moves_case_2(node *current, int x, int y){
 	node *new_node = new node(tab, current->_size, current);
 	this->rate_node(new_node);
 	this->tmp.push_back(new_node);
-	// std::cout << "case 2 possible" << std::endl;
 }
 
 void	Astar::search_moves_case_3(node *current, int x, int y){
@@ -103,7 +108,6 @@ void	Astar::search_moves_case_3(node *current, int x, int y){
 	node *new_node = new node(tab, current->_size, current);
 	this->rate_node(new_node);
 	this->tmp.push_back(new_node);
-	// std::cout << "case 3 possible" << std::endl;
 }
 
 void	Astar::search_moves_case_4(node *current, int x, int y){
@@ -113,7 +117,6 @@ void	Astar::search_moves_case_4(node *current, int x, int y){
 	node *new_node = new node(tab, current->_size, current);
 	this->rate_node(new_node);
 	this->tmp.push_back(new_node);
-	// std::cout << "case 4 possible" << std::endl;
 }
 
 int		**Astar::copy_state(int **state, int size)
@@ -276,9 +279,10 @@ void	Astar::getGoalPos(node *node, int *goal_x, int *goal_y, int to_find){
 }
 
 void	print_it(node *node){
-	std::cout << "RATE = ";
+	std::cout << "RATE ZBRA = ";
 	std::cout << node->_rate << std::endl;
 	node->print_state();
+	std::cout << *node << std::endl;
 }
 
 node	*Astar::best_move(std::vector<node *> & open_list, std::vector<node *> & closed_list){

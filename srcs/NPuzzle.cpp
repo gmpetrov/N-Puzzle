@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:08:25 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/26 10:33:03 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/26 21:25:35 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,26 +167,39 @@ const char		*NPuzzle::puzzle_exception::what() const throw(){
 	return this->error.c_str();
 }
 
+// void	print_it(node *node){
+// 	std::cout << "================" << std::endl;
+// 	std::cout << "RATE = ";
+// 	std::cout << node->_rate << std::endl;
+// 	node->print_state();
+// }
+
 /*
 **	void	NPuzzle::rezolve(char *)
 */
 
 void		NPuzzle::rezolve(char *file){
 	std::vector<node *>::iterator it;
-
 	this->parse(file);
-	this->closed_list.push_back(this->current);
-	while (algo.is_solution(this->current) != true){
-		// this->current->print_state();
+	algo.rate_node(this->current);
+	this->open_list.push_back(this->current);
+	this->success = false;
+	while (success != true){
+		current = this->algo.best_move(this->open_list, this->closed_list);
+		if (algo.is_solution(current) == true)
+			success = true;
 		this->algo.search_moves(this->current, this->open_list, this->closed_list);
 		this->open_list.insert(this->open_list.end(), algo.tmp.begin(), algo.tmp.end());
 		if (this->open_list.empty()){
 			std::cout << "NO SOLUTION" << std::endl;
 			exit(0);
 		}
-		current = this->algo.best_move(this->open_list, this->closed_list);
 		this->current->_generation += 1;
-		std::cout << this->current->_rate << std::endl;
+		if (this->current->_rate < 3){
+			std::cout << "Rate = " << this->current->_rate << std::endl;
+			this->current->print_state();
+		}
+		//for_each(this->open_list.begin(), this->closed_list.end(), print_it);
 	}
 	std::cout << "FIND ONE" << std::endl;
 	current->print_state();
