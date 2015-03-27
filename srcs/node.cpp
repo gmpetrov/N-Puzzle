@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:49 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/26 21:20:24 by gmp              ###   ########.fr       */
+/*   Updated: 2015/03/27 10:01:10 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ node::~node(void){
 }
 
 std::ostream & 	operator<<(std::ostream & o, node const & i){
-	return o << "node : { _rate = " << i._rate << ";" << " parent._rate = " << i._parent->_rate << ";" << " }" << std::endl;
+	return o << "node : { _rate = " << i._rate << ";" << " parent._rate = " << i._parent->_rate << ";" << "_generation : " << i._generation << ";" << " }" << std::endl;
 }
 
 bool	node::operator<(const node & rhs) const{
