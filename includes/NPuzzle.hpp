@@ -57,7 +57,6 @@ class NPuzzle
 
 		Astar	algo;
 
-		node		*current;
 		std::vector<node *>	open_list;
 		std::vector<node *>	closed_list;
 		template<typename T>

@@ -12,15 +12,15 @@
 
 #include "NPuzzle.hpp"
 
+using namespace std;
+
 NPuzzle::NPuzzle() : parser_map(NULL){
 	this->_size = -42;
-	this->parser_line_counter = 0;
-	this->current = NULL;
+        this->parser_line_counter = 0;
 }
 
 NPuzzle::NPuzzle(int size) : parser_map(NULL), _size(size){
-	this->parser_line_counter = 0;
-	this->current = NULL;
+        this->parser_line_counter = 0;
 }
 
 NPuzzle::NPuzzle(const NPuzzle & src){
@@ -28,8 +28,6 @@ NPuzzle::NPuzzle(const NPuzzle & src){
 }
 
 NPuzzle::~NPuzzle(void){
-	if (this->current)
-		delete this->current;
 }
 
 NPuzzle &	NPuzzle::operator=(NPuzzle const & rhs){
@@ -119,8 +117,7 @@ bool		NPuzzle::parse(char *file_to_parse){
 		}
 		file.close();
 		this->check_if_space_exist();
-		this->current = new node(this->parser_map, this->_size);
-		return true;
+                return true;
 	}
 	else{
 		std::cout << "Can't open " << file_to_parse << std::endl;
@@ -179,30 +176,40 @@ const char		*NPuzzle::puzzle_exception::what() const throw(){
 */
 
 
-void		NPuzzle::rezolve(char *file){
-	std::vector<node *>::iterator it;
-	this->parse(file);
-	algo.rate_node(this->current);
-	this->open_list.push_back(this->current);
+void NPuzzle::rezolve(char *file){
+
+        if(!this->parse(file))
+        {
+            cout << "unable to read input file" << endl;
+            return;
+        }
+
+        node *current = new node(this->parser_map, this->_size);
+
+        current->print_state();
+
+        algo.rate_node(current);
+        this->open_list.push_back(current);
 	this->success = false;
-	while (success != true){
-		current = this->algo.best_move(this->open_list, this->closed_list);
-		if (algo.is_solution(current) == true)
+
+        while (success != true){
+                current = this->algo.best_move(this->open_list, this->closed_list);
+                if (algo.is_solution(current) == true)
 			success = true;
-		this->algo.search_moves(this->current, this->open_list, this->closed_list);
+                this->algo.search_moves(current, this->open_list, this->closed_list);
 		this->open_list.insert(this->open_list.end(), algo.tmp.begin(), algo.tmp.end());
 		if (this->open_list.empty()){
 			std::cout << "NO SOLUTION" << std::endl;
 			exit(0);
 		}
-		this->current->_generation += 1;
-		if (this->current->_rate < 3){
-			std::cout << "Rate = " << this->current->_rate << std::endl;
-			this->current->print_state();
+                current->_generation += 1;
+                if (current->_rate < 3){
+                        std::cout << "Rate = " << current->_rate << std::endl;
+                        current->print_state();
 		}
 		//for_each(this->open_list.begin(), this->closed_list.end(), print_it);
 	}
-	algo.get_path(this->current);
+        algo.get_path(current);
 	std::cout << "FIND ONE" << std::endl;
 	// current->print_state();
  }
