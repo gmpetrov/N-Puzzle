@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:08:25 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/26 23:35:39 by gmp              ###   ########.fr       */
+/*   Updated: 2015/06/27 22:12:33 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,6 +185,7 @@ void		NPuzzle::rezolve(char *file){
 	algo.rate_node(this->current);
 	this->open_list.push_back(this->current);
 	this->success = false;
+	this->current->_generation = 0;
 	while (success != true){
 		current = this->algo.best_move(this->open_list, this->closed_list);
 		if (algo.is_solution(current) == true)
@@ -195,7 +196,6 @@ void		NPuzzle::rezolve(char *file){
 			std::cout << "NO SOLUTION" << std::endl;
 			exit(0);
 		}
-		this->current->_generation += 1;
 		if (this->current->_rate < 3){
 			std::cout << "Rate = " << this->current->_rate << std::endl;
 			this->current->print_state();
