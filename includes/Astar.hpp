@@ -20,26 +20,21 @@
 # include <algorithm>
 # include "node.hpp"
 
-void	print_it(node *node);
-
 class Astar
 {
 	public:
-		Astar();
+                Astar(){}
+
 		Astar(const Astar & src);
 		~Astar(void);
 		Astar &	operator=(Astar const & rhs);
 
 		void	search_moves(node *current, std::vector<node *> & open_list, std::vector<node *> & closed_list);
-		void	search_moves_case_1(node *current, int x, int y);
-		void	search_moves_case_2(node *current, int x, int y);
-		void	search_moves_case_3(node *current, int x, int y);
-		void	search_moves_case_4(node *current, int x, int y);
+                node*	search_moves_case(node *current, int x, int y, int x_mov, int y_mov);
 		void	remove_or_update_if_already_in_open_list(std::vector<node *>& open_list);
 		void	remove_if_already_in_closed_list(std::vector<node *>& closed_list);
 
-		void	find_blank(node *current, int *x, int *y);
-		int		**copy_state(int **state, int size);
+                void	find_blank(node *current, int *x, int *y);
 		bool	is_solution(node *current);
 		void	rate_node(node *node);
 		int		manhattan_heuristic(node *node);
@@ -49,7 +44,7 @@ class Astar
 		node	*best_move(std::vector<node *> & open_list, std::vector<node *> & closed_list);
 		void	get_path(node *current);
 
-		std::vector<node *>	tmp;
+                std::vector<node *>	possible_movements;
 
 		/* GETTERS */
 

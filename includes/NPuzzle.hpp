@@ -33,13 +33,12 @@ class NPuzzle
 		~NPuzzle(void);
 		NPuzzle &	operator=(NPuzzle const & rhs);
 		void		ft_usage(void);
-		void		rezolve(char *file);
+                void		resolve(char *file);
 
 		/* GETTERS */
-		int			getSize(void) const;
-
-		/* SETTERS */
-		void		setSize(int size);
+                inline int getSize(void) const{
+                    return _size;
+                }
 
 		/* Parser */
 		bool		parse(char *);
@@ -57,8 +56,6 @@ class NPuzzle
 
 		Astar	algo;
 
-		std::vector<node *>	open_list;
-		std::vector<node *>	closed_list;
 		template<typename T>
 		void		free_tab(T tab);
 

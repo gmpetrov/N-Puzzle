@@ -20,8 +20,8 @@
 class node
 {
 	public:
-		node(int  **state, int size);
-		node(int **state, int size,node *parent);
+                node(int  **state, int size);
+                node(int **state, node *parent);
 		node(const node & src);
 		~node(void);
 		node &	operator=(node const & rhs);
@@ -30,12 +30,12 @@ class node
 		int		cost;
 		int		**_state;
 		int		_rate;
-		int		_generation;
-		int		_size;
+                int		_generation;
+                int		_size;
 
 		bool	is_equal(const node & rhs) const;
 		bool	is_not_equal(const node & rhs) const;
-		void	init_state(int **state, int size);
+                void	init_state(int **state, int size);
 		void	print_state(void);
 		//void	copy_state(int **state);
 

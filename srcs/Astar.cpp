@@ -13,14 +13,14 @@
 
 #include "Astar.hpp"
 
-Astar::Astar(){
-}
+using namespace std;
 
 Astar::Astar(const Astar & src){
 	*this = src;
 }
 
 Astar::~Astar(void){
+    // TODO delete all tmp nodes
 }
 
 Astar &	Astar::operator=(Astar const & rhs){
@@ -28,44 +28,70 @@ Astar &	Astar::operator=(Astar const & rhs){
 	return *this;
 }
 
+// Search moves available from current node and add to open list
 void	Astar::search_moves(node *current, std::vector<node *> & open_list, std::vector<node *> & closed_list){
-	int	x, y;
-	this->tmp.clear();
-	this->find_blank(current, &x, &y);
-	if ((y - 1) >= 0)
-		this->search_moves_case_1(current, x, y);
-	if ((x + 1) < current->_size)
-		this->search_moves_case_2(current, x, y);
-	if ((y + 1) < current->_size)
-		this->search_moves_case_3(current, x, y);
-	if ((x - 1) >= 0)
-		this->search_moves_case_4(current, x, y);
+
+        // find free item in map
+        int	x, y;
+        this->find_blank(current, &x, &y);
+
+        this->possible_movements.clear();
+
+        if ((y - 1) >= 0)
+        {
+            this->possible_movements.push_back(search_moves_case(current, x, y, x, y-1));
+        }
+        if ((x + 1) < current->_size)
+        {
+            this->possible_movements.push_back(search_moves_case(current, x, y, x+1, y));
+        }
+        if ((y + 1) < current->_size)
+        {
+            this->possible_movements.push_back(search_moves_case(current, x, y, x, y+1));
+        }
+        if ((x - 1) >= 0)
+        {
+            this->possible_movements.push_back(search_moves_case(current, x, y, x-1, y));
+        }
+
+        cout << "possible movements " << endl;
+
+        for(unsigned int i=0;i<possible_movements.size();++i)
+        {
+            cout << "-------" << i << "--------" << endl;
+
+            possible_movements[i]->print_state();
+        }
+        cout << "------------------" << endl;
+
 
 	this->remove_or_update_if_already_in_open_list(open_list);
-	this->remove_if_already_in_closed_list(closed_list);
+
+        // avoid to examine same path twice
+        this->remove_if_already_in_closed_list(closed_list);
 }
 
 void	Astar::remove_if_already_in_closed_list(std::vector<node *>& closed_list){
 	bool occur = false;
-	for (std::vector<node *>::iterator it_tmp = tmp.begin(); it_tmp != tmp.end(); it_tmp++){
+        for (std::vector<node *>::iterator it_possible_movements = possible_movements.begin(); it_possible_movements != possible_movements.end(); it_possible_movements++){
 		if (occur == true){
-			it_tmp = tmp.begin();
+                        it_possible_movements = possible_movements.begin();
 			occur = false;
 		}
 		for (std::vector<node *>::const_iterator it_closed = closed_list.begin(); it_closed != closed_list.end(); it_closed++){
-			if ((*(*it_tmp)) == (*(*it_closed))){
-				if ((*(*it_tmp)) < (*(*it_closed))){
-					// tmp.erase(it_tmp);
+                        if ((*(*it_possible_movements)) == (*(*it_closed))){
+                                if ((*(*it_possible_movements)) < (*(*it_closed))){
+                                        // possible_movements.erase(it_possible_movements);
 					closed_list.erase(it_closed);
 					it_closed = closed_list.begin();
 					if (it_closed == closed_list.end())
 						return;
 				}
 				else{
-					tmp.erase(it_tmp);
+                                        possible_movements.erase(it_possible_movements);
 					occur = true;
-					it_tmp = tmp.begin();
-					if(it_tmp == tmp.end())
+                                        it_possible_movements = possible_movements.begin();
+                                        if(it_possible_movements == possible_movements.end())
 						return;
 					break ;
 				}
@@ -76,21 +102,21 @@ void	Astar::remove_if_already_in_closed_list(std::vector<node *>& closed_list){
 
 void	Astar::remove_or_update_if_already_in_open_list(std::vector<node *>& open_list){
 	bool occur = false;
-	for (std::vector<node *>::iterator it_tmp = tmp.begin(); it_tmp != tmp.end(); it_tmp++){
+        for (std::vector<node *>::iterator it_possible_movements = possible_movements.begin(); it_possible_movements != possible_movements.end(); it_possible_movements++){
 		if (occur == true){
-			it_tmp = tmp.begin();
+                        it_possible_movements = possible_movements.begin();
 			occur = false;
 		}
 		for (std::vector<node *>::iterator it_open = open_list.begin(); it_open != open_list.end(); it_open++){
-			if ((*(*it_tmp)) == (*(*it_open))){
-				if ((*(*it_tmp)) < (*(*it_open))){
-					(*(*it_open)) = (*(*it_tmp));
+                        if ((*(*it_possible_movements)) == (*(*it_open))){
+                                if ((*(*it_possible_movements)) < (*(*it_open))){
+                                        (*(*it_open)) = (*(*it_possible_movements));
 				}
-				delete *it_tmp;
-				tmp.erase(it_tmp);
+                                delete *it_possible_movements;
+                                possible_movements.erase(it_possible_movements);
 				occur = true;
-				it_tmp = tmp.begin();
-				if (it_tmp == tmp.end())
+                                it_possible_movements = possible_movements.begin();
+                                if (it_possible_movements == possible_movements.end())
 					return;
 				break ;
 			}
@@ -98,53 +124,21 @@ void	Astar::remove_or_update_if_already_in_open_list(std::vector<node *>& open_l
 	}
 }
 
-void	Astar::search_moves_case_1(node *current, int x, int y){
-	int		**tab = copy_state(current->_state, current->_size);
-	tab[y][x] = tab[y - 1][x];
-	tab[y - 1][x] = 0;
-	node *new_node = new node(tab, current->_size, current);
+
+node* Astar::search_moves_case(node *current, int x_blank, int y_blank, int x_mov, int y_mov){
+
+        // apply movement to current map
+
+        node *new_node = new node(*current);
+
+        new_node->_state[y_blank][x_blank] = new_node->_state[y_mov][x_mov]; // move
+        new_node->_state[y_mov][x_mov] = 0; // set empty
+
 	this->rate_node(new_node);
-	this->tmp.push_back(new_node);
+
+        return new_node;
 }
 
-void	Astar::search_moves_case_2(node *current, int x, int y){
-	int		**tab = copy_state(current->_state, current->_size);
-	tab[y][x] = tab[y][x + 1];
-	tab[y][x + 1] = 0;
-	node *new_node = new node(tab, current->_size, current);
-	this->rate_node(new_node);
-	this->tmp.push_back(new_node);
-}
-
-void	Astar::search_moves_case_3(node *current, int x, int y){
-	int		**tab = copy_state(current->_state, current->_size);
-	tab[y][x] = tab[y + 1][x];
-	tab[y + 1][x] = 0;
-	node *new_node = new node(tab, current->_size, current);
-	this->rate_node(new_node);
-	this->tmp.push_back(new_node);
-}
-
-void	Astar::search_moves_case_4(node *current, int x, int y){
-	int		**tab = copy_state(current->_state, current->_size);
-	tab[y][x] = tab[y][x - 1];
-	tab[y][x - 1] = 0;
-	node *new_node = new node(tab, current->_size, current);
-	this->rate_node(new_node);
-	this->tmp.push_back(new_node);
-}
-
-int		**Astar::copy_state(int **state, int size)
-{
-	int **tab = (int **)malloc(sizeof(int *) * size);
-	for (int j = 0; j < size; j++){
-		tab[j] = (int *)malloc(sizeof(int) * size);
-		for (int i = 0; i < size; i++){
-			tab[j][i] = state[j][i];
-		}
-	}
-	return tab;
-}
 
 void	Astar::find_blank(node *current, int *x, int *y){
 	for (*y = 0; *y < current->_size; *y += 1){
@@ -301,25 +295,25 @@ void	print_it(node *node){
 }
 
 node	*Astar::best_move(std::vector<node *> & open_list, std::vector<node *> & closed_list){
-	node *tmp;
+        node *possible_movements_node;
 
 	std::sort(open_list.begin(), open_list.end());
-	tmp = *open_list.begin();
-	closed_list.push_back(tmp);
+        possible_movements_node = *open_list.begin();
+        closed_list.push_back(possible_movements_node);
 	std::reverse(open_list.begin(), open_list.end());
 	open_list.pop_back();
-	return tmp;
+        return possible_movements_node;
 }
 
 bool compare_generation(node *i, node *j) { return (i->_generation < j->_generation); }
 
 void	Astar::get_path(node *current)
 {
-	node *tmp = current;
-	std::vector<node *> path;
-	while (tmp->_parent){
-		path.push_back(tmp);
-		tmp = tmp->_parent;
+        node *possible_movements_node = current;
+        std::vector<node *> path;
+        while (possible_movements_node->_parent){
+                path.push_back(possible_movements_node);
+                possible_movements_node = possible_movements_node->_parent;
 	}
 	std::sort(path.begin(), path.end(), compare_generation);
 	std::reverse(path.begin(), path.end());

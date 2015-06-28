@@ -20,7 +20,7 @@ int		main(int ac, char **av)
 	}
 	else if (ac == 2){
 		try{
-			puzzle.rezolve(av[1]);
+                        puzzle.resolve(av[1]);
 		}
 		catch (NPuzzle::puzzle_exception e){
 			std::cout << e.what() << std::endl;
