@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:08:25 by gmp               #+#    #+#             */
-/*   Updated: 2015/06/27 22:12:33 by gmp              ###   ########.fr       */
+/*   Updated: 2015/06/28 23:04:00 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ using namespace std;
 
 NPuzzle::NPuzzle() : parser_map(NULL){
 	this->_size = -42;
-        this->parser_line_counter = 0;
+	this->parser_line_counter = 0;
 }
 
 NPuzzle::NPuzzle(int size) : parser_map(NULL), _size(size){
-        this->parser_line_counter = 0;
+	this->parser_line_counter = 0;
 }
 
 NPuzzle::NPuzzle(const NPuzzle & src){
@@ -47,7 +47,7 @@ void		NPuzzle::check_if_space_exist(void){
 }
 
 void		NPuzzle::ft_usage(void){
-		std::cout << "[USAGE] - ./npuzzle [map] or ./npuzzle" << std::endl;
+	std::cout << "[USAGE] - ./npuzzle [map] or ./npuzzle" << std::endl;
 }
 
 void		NPuzzle::parser_save_tile(int nb, int x, int y){
@@ -69,69 +69,69 @@ void		NPuzzle::parser_check_line_size(char **tab){
 		if (tab[i][0] == '#'){
 			break ;
 		}
-	if (i != this->_size){
-		this->free_tab<char **>(tab);
-		throw NPuzzle::puzzle_exception("Invalid size for row");
+		if (i != this->_size){
+			this->free_tab<char **>(tab);
+			throw NPuzzle::puzzle_exception("Invalid size for row");
+		}
 	}
-}
 
-void		NPuzzle::parser_check_line(std::string line){
-	char	**tab;
+	void		NPuzzle::parser_check_line(std::string line){
+		char	**tab;
 
-	tab = ft_strsplit(line.c_str(), ' ');
-	if (this->_size != -42 && this->_size >= 3)
-		parser_check_line_size(tab);
-	for (int j = 0; tab[j] != NULL; j++){
-		for (int i = 0; tab[j][i] != 0; i++){
-			if (!ft_isdigit(tab[j][i]))
-				throw NPuzzle::puzzle_exception("Invalid Map");
+		tab = ft_strsplit(line.c_str(), ' ');
+		if (this->_size != -42 && this->_size >= 3)
+			parser_check_line_size(tab);
+		for (int j = 0; tab[j] != NULL; j++){
+			for (int i = 0; tab[j][i] != 0; i++){
+				if (!ft_isdigit(tab[j][i]))
+					throw NPuzzle::puzzle_exception("Invalid Map");
+			}
+			if (this->parser_is_map == true)
+				this->parser_save_tile(std::atoi(tab[j]), j, this->parser_line_counter);
 		}
 		if (this->parser_is_map == true)
-			this->parser_save_tile(std::atoi(tab[j]), j, this->parser_line_counter);
-	}
-	if (this->parser_is_map == true)
-		this->parser_line_counter += 1;
-	if (tab[0] && !tab[1]){
-		this->_size = ft_atoi(tab[0]);
-		this->parser_is_map = true;
-		if (this->_size < 3)
-		{
-			this->free_tab<char **>(tab);
-			throw NPuzzle::puzzle_exception(static_cast<std::string>("Size of Map is too small, given : ") + static_cast<std::string>(std::to_string(this->_size)));
-		}
-	}
-	this->free_tab<char **>(tab);
-}
-
-bool		NPuzzle::parse(char *file_to_parse){
-	std::string line;
-	std::ifstream file(file_to_parse);
-
-	if (file.is_open()){
-		while (getline(file, line)){
-			if (line.c_str()[0] == '#')
-				continue ;
-			else{
-				this->parser_check_line(line);
+			this->parser_line_counter += 1;
+		if (tab[0] && !tab[1]){
+			this->_size = ft_atoi(tab[0]);
+			this->parser_is_map = true;
+			if (this->_size < 3)
+			{
+				this->free_tab<char **>(tab);
+				throw NPuzzle::puzzle_exception(static_cast<std::string>("Size of Map is too small, given : ") + static_cast<std::string>(std::to_string(this->_size)));
 			}
 		}
-		file.close();
-		this->check_if_space_exist();
-                return true;
+		this->free_tab<char **>(tab);
 	}
-	else{
-		std::cout << "Can't open " << file_to_parse << std::endl;
-		return false;
+
+	bool		NPuzzle::parse(char *file_to_parse){
+		std::string line;
+		std::ifstream file(file_to_parse);
+
+		if (file.is_open()){
+			while (getline(file, line)){
+				if (line.c_str()[0] == '#')
+					continue ;
+				else{
+					this->parser_check_line(line);
+				}
+			}
+			file.close();
+			this->check_if_space_exist();
+			return true;
+		}
+		else{
+			std::cout << "Can't open " << file_to_parse << std::endl;
+			return false;
+		}
 	}
-}
 
 template<typename T>
-void		NPuzzle::free_tab(T tab){
-	for (int j = 0; tab[j] != NULL; j++){
-		free(tab[j]);
+	void		NPuzzle::free_tab(T tab){
+		for (int j = 0; tab[j] != NULL; j++){
+			free(tab[j]);
+		}
+		free(tab);
 	}
-	free(tab);
-}
 
 /*
 **	Exceptions
@@ -160,83 +160,78 @@ const char		*NPuzzle::puzzle_exception::what() const throw(){
 
 void NPuzzle::resolve(char *file){
 
-        if(!this->parse(file))
-        {
-            cout << "unable to read input file" << endl;
-            return;
-        }
+	if(!this->parse(file))
+	{
+		cout << "unable to read input file" << endl;
+		return;
+	}
 
         // set initial map as current node
-        node *current = new node(this->parser_map, this->_size);
+	node *current = new node(this->parser_map, this->_size);
 
-        cout << "input" << endl;
-        current->print_state();
-        algo.rate_node(current);
+	cout << "input" << endl;
+	current->print_state();
+	algo.rate_node(current);
 
         // Open list contains nodes to be considered (they need to be checked)
-        std::vector<node*> open_list;
+	std::vector<node*> open_list;
 
         // Add initial node to open list
-        open_list.push_back(current);
+	open_list.push_back(current);
 
-        this->success = false;
+	this->success = false;
 
-        std::vector<node*> closed_list;
+	std::vector<node*> closed_list;
 
-        int max_iter = 5;//-1;
+        int max_iter = -1;//-1;
         int num_iter = 0;
 
         while (success != true){
 
-            if(num_iter == max_iter && max_iter != -1)
-            {
-                cout << "max num iterations " << num_iter << " reached" << endl;
-                break;
-            }
+        	if(num_iter == max_iter && max_iter != -1)
+        	{
+        		cout << "max num iterations " << num_iter << " reached" << endl;
+        		break;
+        	}
 
             // Check nodes in open list and remove examined node from closed list
 
             // Choose lowest cost in open list as next node to examine
-            current = this->algo.best_move(open_list, closed_list);
+        	current = this->algo.best_move(open_list, closed_list);
 
-            cout << "best move has cost " << current->_rate  << " and num generations " << current->_generation << endl;
-            current->print_state();
+        	// cout << "best move has cost " << current->_rate  << " and num generations " << current->_generation << endl;
+        	// current->print_state();
 
-            if (algo.is_solution(current) == true)
-                    success = true;
+        	if (algo.is_solution(current) == true)
+        		success = true;
 
-            this->algo.search_moves(current, open_list, closed_list);
-
+        	this->algo.search_moves(current, open_list, closed_list);
+    		closed_list.push_back(current);
             // Add reachable nodes to the open list
             // Save the parent node for each node in order to be able to trace path back
-            open_list.insert(open_list.end(), algo.possible_movements.begin(), algo.possible_movements.end());
-            if (open_list.empty()){
-                    std::cout << "NO SOLUTION" << std::endl;
-                    exit(0);
-            }
-            if (current->_rate < 3){
-                    std::cout << "Rate = " << current->_rate << std::endl;
-                    current->print_state();
-            }
+        	// open_list.insert(open_list.end(), algo.possible_movements.begin(), algo.possible_movements.end());
+        	if (open_list.empty()){
+        		std::cout << "NO SOLUTION" << std::endl;
+        		exit(0);
+        	}
 
+        	// cout << "open_list size " << open_list.size()  << " / closed_list size " << closed_list.size() << endl;
 
-            cout << "open_list size " << open_list.size()  << " / closed_list size " << closed_list.size() << endl;
-
-            num_iter ++;
+        	num_iter ++;
         }
 
         if(success)
         {
-            algo.get_path(current);
-            std::cout << "FIND ONE" << std::endl;
-            current->print_state();
+        	algo.get_path(current);
+        	std::cout << "FIND ONE" << std::endl;
+        	current->print_state();
 
         }
         else
         {
-            algo.get_path(current);
-            std::cout << "FAILED" << std::endl;
-            current->print_state();
+        	algo.get_path(current);
+        	std::cout << "FAILED" << std::endl;
+        	current->print_state();
 
         }
     }

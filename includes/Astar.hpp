@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/22 16:40:28 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/26 23:35:56 by gmp              ###   ########.fr       */
+/*   Updated: 2015/06/28 23:52:41 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,12 @@ class Astar
 		node	*best_move(std::vector<node *> & open_list, std::vector<node *> & closed_list);
 		void	get_path(node *current);
 
-                std::vector<node *>	possible_movements;
+		std::vector<node *>	possible_movements;
+
+		bool	_isInOpenList;
+		bool	_isInClosedList;
+
+		void	checkOccurenceInOpenAndClosedLists(std::vector<node *>& open_list, std::vector<node *>& closed_list);
 
 		/* GETTERS */
 
