@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:08:25 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/26 23:35:39 by gmp              ###   ########.fr       */
+/*   Updated: 2015/06/27 22:12:33 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,17 +157,6 @@ const char		*NPuzzle::puzzle_exception::what() const throw(){
 	return this->error.c_str();
 }
 
-// void	print_it(node *node){
-// 	std::cout << "================" << std::endl;
-// 	std::cout << "RATE = ";
-// 	std::cout << node->_rate << std::endl;
-// 	node->print_state();
-// }
-
-/*
-**	void	NPuzzle::rezolve(char *)
-*/
-
 
 void NPuzzle::resolve(char *file){
 
@@ -250,3 +239,4 @@ void NPuzzle::resolve(char *file){
 
         }
     }
+

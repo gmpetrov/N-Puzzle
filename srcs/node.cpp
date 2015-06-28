@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:49 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/26 21:20:24 by gmp              ###   ########.fr       */
+/*   Updated: 2015/06/27 22:12:48 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ node::node(int **state, node *parent) : _parent(parent){
         this->init_state(state, parent->_size);
 
 	if (parent){
-                this->_generation = parent->_generation+1;
+		this->_generation = parent->_generation + 1;
 	}
 }
 
