@@ -20,8 +20,8 @@
 class node
 {
 	public:
+                // Constructor to init node from map
                 node(int  **state, int size);
-                node(int **state, node *parent);
 		node(const node & src);
 		~node(void);
 		node &	operator=(node const & rhs);
@@ -37,6 +37,11 @@ class node
 		bool	is_not_equal(const node & rhs) const;
                 void	init_state(int **state, int size);
 		void	print_state(void);
+
+                void incrGeneration(){
+                    _generation++;
+                }
+
 		//void	copy_state(int **state);
 
 		template<typename T>

@@ -54,6 +54,7 @@ void	Astar::search_moves(node *current, std::vector<node *> & open_list, std::ve
             this->possible_movements.push_back(search_moves_case(current, x, y, x-1, y));
         }
 
+        /*
         cout << "possible movements " << endl;
 
         for(unsigned int i=0;i<possible_movements.size();++i)
@@ -63,7 +64,16 @@ void	Astar::search_moves(node *current, std::vector<node *> & open_list, std::ve
             possible_movements[i]->print_state();
         }
         cout << "------------------" << endl;
+        */
 
+        /*
+        if(current->_parent)
+        {
+            cout << "parent " << endl;
+            current->_parent->print_state();
+            cout << "------------------" << endl;
+        }
+        */
 
 	this->remove_or_update_if_already_in_open_list(open_list);
 
@@ -128,13 +138,17 @@ void	Astar::remove_or_update_if_already_in_open_list(std::vector<node *>& open_l
 node* Astar::search_moves_case(node *current, int x_blank, int y_blank, int x_mov, int y_mov){
 
         // apply movement to current map
-
         node *new_node = new node(*current);
 
         new_node->_state[y_blank][x_blank] = new_node->_state[y_mov][x_mov]; // move
         new_node->_state[y_mov][x_mov] = 0; // set empty
 
 	this->rate_node(new_node);
+
+        new_node->incrGeneration();
+
+        // assign parent
+        new_node->_parent = current;
 
         return new_node;
 }

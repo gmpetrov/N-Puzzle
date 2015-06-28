@@ -13,17 +13,10 @@
 
 #include "node.hpp"
 
+
 node::node(int **state, int size) : _parent(NULL), cost(0){
         this->init_state(state, size);
-	this->_generation = 0;
-}
-
-node::node(int **state, node *parent) : _parent(parent){
-        this->init_state(state, parent->_size);
-
-	if (parent){
-		this->_generation = parent->_generation + 1;
-	}
+        this->_generation = 0;
 }
 
 node::node(const node & src){
@@ -37,9 +30,11 @@ node::node(const node & src){
 
 node::~node(void){
 
-    // TODO free state
-	// if (this->_state)
-	// 	this->free_tab<int **>(this->_state);
+    for(int j = 0; j < _size; ++j) {
+        delete[] _state[j];
+    }
+
+    delete[] _state;
 }
 
 std::ostream & 	operator<<(std::ostream & o, node const & i){
@@ -98,8 +93,13 @@ void	node::init_state(int **state, int size){
 void	node::print_state(void){
 	for(int j = 0; j < this->_size; j++){
 		for(int i = 0; i < this->_size; i++)
-			std::cout << this->_state[j][i] << " ";
-		std::cout << std::endl;
+                {
+                    if(this->_state[j][i]<10)
+                        std::cout << this->_state[j][i] << "  ";
+                    else
+                        std::cout << this->_state[j][i] << " ";
+                }
+                std::cout << std::endl;
 	}
 }
 
@@ -108,19 +108,11 @@ node &	node::operator=(node const & rhs){
 	this->_parent = rhs.getParent();
 	this->cost = rhs.getCost();
 
-	memcpy(this->_state, rhs._state, sizeof(int *) * this->_size * this->_size);
-	//this->copy_state(rhs._state);
+        init_state( rhs._state, rhs._size);
+
 	this->_rate = rhs._rate;
 	this->_generation = rhs._generation;
 	return *this;
-}
-
-template<typename T>
-void		node::free_tab(T tab){
-	for (int j = 0; tab[j] != NULL; j++){
-		free(tab[j]);
-	}
-	free(tab);
 }
 
 /*

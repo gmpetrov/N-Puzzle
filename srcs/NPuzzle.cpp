@@ -183,25 +183,23 @@ void NPuzzle::resolve(char *file){
 
         std::vector<node*> closed_list;
 
-        int max_iter = 50;//-1;
+        int max_iter = 5;//-1;
         int num_iter = 0;
-        current->_generation = 0;
+
         while (success != true){
 
             if(num_iter == max_iter && max_iter != -1)
             {
                 cout << "max num iterations " << num_iter << " reached" << endl;
-                return;
+                break;
             }
-            cout << "current" << endl;
-            current->print_state();
 
             // Check nodes in open list and remove examined node from closed list
 
-            // Chose lowest cost in open list as next node to examine
+            // Choose lowest cost in open list as next node to examine
             current = this->algo.best_move(open_list, closed_list);
 
-            cout << "best move" << endl;
+            cout << "best move has cost " << current->_rate  << " and num generations " << current->_generation << endl;
             current->print_state();
 
             if (algo.is_solution(current) == true)
@@ -220,6 +218,9 @@ void NPuzzle::resolve(char *file){
                     std::cout << "Rate = " << current->_rate << std::endl;
                     current->print_state();
             }
+
+
+            cout << "open_list size " << open_list.size()  << " / closed_list size " << closed_list.size() << endl;
 
             num_iter ++;
         }
