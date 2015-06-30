@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:04:53 by gmp               #+#    #+#             */
-/*   Updated: 2015/06/28 20:29:49 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/01 00:47:53 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <iostream>
 # include <fstream>
 # include <string>
-# include <vector>
+# include <list>
 # include "node.hpp"
 # include "Astar.hpp"
 

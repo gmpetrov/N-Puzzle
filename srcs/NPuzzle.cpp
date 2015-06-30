@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:08:25 by gmp               #+#    #+#             */
-/*   Updated: 2015/06/28 23:04:00 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/01 01:32:20 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,79 +160,152 @@ const char		*NPuzzle::puzzle_exception::what() const throw(){
 
 void NPuzzle::resolve(char *file){
 
-	if(!this->parse(file))
-	{
-		cout << "unable to read input file" << endl;
-		return;
-	}
+	bool success = false;
 
-        // set initial map as current node
+	// CHECK IF FILE EXIST AND IF IT'S A VALID MAP
+	if(!this->parse(file)){ cout << "unable to read input file" << endl; return; }
+
+	// SET INITIAL STATE AS CURRENT STATE
 	node *current = new node(this->parser_map, this->_size);
 
 	cout << "input" << endl;
 	current->print_state();
 	algo.rate_node(current);
 
-        // Open list contains nodes to be considered (they need to be checked)
-	std::vector<node*> open_list;
+	//LISTS USED IN ALGORITHM
+	std::list<node *> open_list;
+	std::list<node *> closed_list;
 
-        // Add initial node to open list
+	// Add initial node to open list
 	open_list.push_back(current);
 
-	this->success = false;
+	while(!open_list.empty()){
 
-	std::vector<node*> closed_list;
+		// GET FIRST ELEMENT OF THE OPEN LIST AS CURRENT NODE
+			// std::sort(open_list.begin(), open_list.end());
+		current = open_list.front();
 
-        int max_iter = -1;//-1;
-        int num_iter = 0;
+		if (current->_heuristic == 0){
+			success = true;
+			break ;
+		}
+		else{
 
-        while (success != true){
+			// REMOVING FIRST ELEMENT OF THE OPEN LIST
+			open_list.pop_front();
 
-        	if(num_iter == max_iter && max_iter != -1)
-        	{
-        		cout << "max num iterations " << num_iter << " reached" << endl;
-        		break;
-        	}
+			// GET ALL POSSIBLE MOVES FROM THE CURRENT NODE
+			std::list<node *> successors = this->algo.search_moves(current);
 
-            // Check nodes in open list and remove examined node from closed list
 
-            // Choose lowest cost in open list as next node to examine
-        	current = this->algo.best_move(open_list, closed_list);
+			// ITERATE ON ALL POSSIBLE MOVES
+			for(std::list<node *>::iterator move = successors.begin(); move != successors.end(); ++move){
 
-        	// cout << "best move has cost " << current->_rate  << " and num generations " << current->_generation << endl;
-        	// current->print_state();
+				//CHECKING FOR OCCURENCE ON THE CLOSED LIST
+				if (this->algo.isNodeInList(*move, closed_list)) { continue; }
 
-        	if (algo.is_solution(current) == true)
-        		success = true;
 
-        	this->algo.search_moves(current, open_list, closed_list);
-    		closed_list.push_back(current);
-            // Add reachable nodes to the open list
-            // Save the parent node for each node in order to be able to trace path back
-        	// open_list.insert(open_list.end(), algo.possible_movements.begin(), algo.possible_movements.end());
-        	if (open_list.empty()){
-        		std::cout << "NO SOLUTION" << std::endl;
-        		exit(0);
-        	}
+				//CHECKING FOR OCCURENCE ON THE OPEN LIST
+				node *nodeInOpenList = this->algo.isNodeInList(*move, open_list);
 
-        	// cout << "open_list size " << open_list.size()  << " / closed_list size " << closed_list.size() << endl;
+				if (!nodeInOpenList){
+					this->algo.insertInList(*move, open_list);
 
-        	num_iter ++;
-        }
+				}
+			}
+		}
+		closed_list.push_front(current);
+	}
 
-        if(success)
-        {
-        	algo.get_path(current);
-        	std::cout << "FIND ONE" << std::endl;
-        	current->print_state();
+	if(success)
+	{
+		algo.get_path(current);
+		std::cout << "FIND ONE" << std::endl;
+		current->print_state();
+	}
+	else
+	{
+		algo.get_path(current);
+		std::cout << "FAILED" << std::endl;
+		current->print_state();
+	}
+}
 
-        }
-        else
-        {
-        	algo.get_path(current);
-        	std::cout << "FAILED" << std::endl;
-        	current->print_state();
+// void NPuzzle::resolve(char *file){
 
-        }
-    }
+// 	if(!this->parse(file))
+// 	{
+// 		cout << "unable to read input file" << endl;
+// 		return;
+// 	}
+
+//         // set initial map as current node
+// 	node *current = new node(this->parser_map, this->_size);
+
+// 	cout << "input" << endl;
+// 	current->print_state();
+// 	algo.rate_node(current);
+
+//         // Open list contains nodes to be considered (they need to be checked)
+// 	std::list<node*> open_list;
+
+//         // Add initial node to open list
+// 	open_list.push_front(current);
+
+// 	this->success = false;
+
+// 	std::list<node*> closed_list;
+
+//         int max_iter = -1;//-1;
+//         int num_iter = 0;
+
+//         while (success != true){
+
+//         	if(num_iter == max_iter && max_iter != -1)
+//         	{
+//         		cout << "max num iterations " << num_iter << " reached" << endl;
+//         		break;
+//         	}
+
+//             // Check nodes in open list and remove examined node from closed list
+
+//             // Choose lowest cost in open list as next node to examine
+//         	current = this->algo.best_move(open_list, closed_list);
+
+//         	// cout << "best move has cost " << current->_rate  << " and num generations " << current->_generation << endl;
+//         	// current->print_state();
+
+//         	if (algo.is_solution(current) == true)
+//         		success = true;
+
+//         	this->algo.search_moves(current, open_list, closed_list);
+//     		closed_list.push_front(current);
+//             // Add reachable nodes to the open list
+//             // Save the parent node for each node in order to be able to trace path back
+//         	// open_list.insert(open_list.end(), algo.possible_movements.begin(), algo.possible_movements.end());
+//         	if (open_list.empty()){
+//         		std::cout << "NO SOLUTION" << std::endl;
+//         		exit(0);
+//         	}
+
+//         	// cout << "open_list size " << open_list.size()  << " / closed_list size " << closed_list.size() << endl;
+
+//         	num_iter ++;
+//         }
+
+//         if(success)
+//         {
+//         	algo.get_path(current);
+//         	std::cout << "FIND ONE" << std::endl;
+//         	current->print_state();
+
+//         }
+//         else
+//         {
+//         	algo.get_path(current);
+//         	std::cout << "FAILED" << std::endl;
+//         	current->print_state();
+
+//         }
+//     }
 

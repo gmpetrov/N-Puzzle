@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:43 by gmp               #+#    #+#             */
-/*   Updated: 2015/03/26 19:48:36 by gmp              ###   ########.fr       */
+/*   Updated: 2015/06/30 23:20:47 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,9 @@ class node
 		int		cost;
 		int		**_state;
 		int		_rate;
-                int		_generation;
-                int		_size;
+		int 	_heuristic;
+		int		_generation;
+		int		_size;
 
 		bool	is_equal(const node & rhs) const;
 		bool	is_not_equal(const node & rhs) const;
