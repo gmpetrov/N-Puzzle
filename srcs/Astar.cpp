@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:49 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/01 11:10:19 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/02 17:33:54 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,143 +65,22 @@ std::list<node *> Astar::search_moves(node * current){
 
 	if ((y - 1) >= 0)
 	{
-		moves.push_back(search_moves_case(current, x, y, x, y-1));
+		moves.push_back(search_moves_case(current, x, y, x, y - 1));
 	}
 	if ((x + 1) < current->_size)
 	{
-		moves.push_back(search_moves_case(current, x, y, x+1, y));
+		moves.push_back(search_moves_case(current, x, y, x + 1, y));
 	}
 	if ((y + 1) < current->_size)
 	{
-		moves.push_back(search_moves_case(current, x, y, x, y+1));
+		moves.push_back(search_moves_case(current, x, y, x, y + 1));
 	}
 	if ((x - 1) >= 0)
 	{
-		moves.push_back(search_moves_case(current, x, y, x-1, y));
+		moves.push_back(search_moves_case(current, x, y, x - 1, y));
 	}
 	return moves;
 }
-
-// Search moves available from current node and add to open list
-void	Astar::search_moves(node *current, std::list<node *> & open_list, std::list<node *> & closed_list){
-
-        // find free item in map
-	int	x, y;
-	this->find_blank(current, &x, &y);
-
-	this->possible_movements.clear();
-
-	if ((y - 1) >= 0)
-	{
-		this->possible_movements.push_back(search_moves_case(current, x, y, x, y-1));
-	}
-	if ((x + 1) < current->_size)
-	{
-		this->possible_movements.push_back(search_moves_case(current, x, y, x+1, y));
-	}
-	if ((y + 1) < current->_size)
-	{
-		this->possible_movements.push_back(search_moves_case(current, x, y, x, y+1));
-	}
-	if ((x - 1) >= 0)
-	{
-		this->possible_movements.push_back(search_moves_case(current, x, y, x-1, y));
-	}
-	checkOccurenceInOpenAndClosedLists(open_list, closed_list);
-}
-
-    void	Astar::checkOccurenceInOpenAndClosedLists(std::list<node *>& open_list, std::list<node *>& closed_list){
-    	std::list<node *>::iterator it_possible_movements = possible_movements.begin();
-    	while (it_possible_movements != possible_movements.end())
-    	{
-    		_isInOpenList = false;
-    		_isInClosedList = false;
-
-    		for (std::list<node *>::const_iterator it_closed = closed_list.begin(); it_closed != closed_list.end(); it_closed++){
-    			if ((*(*it_possible_movements)) == (*(*it_closed))){
-    				if ((*(*it_possible_movements)) < (*(*it_closed))){
-    					(*(*it_closed)) = (*(*it_possible_movements));
-    				}
-    				_isInClosedList = true;
-    				break ;
-    			}
-    		}
-
-    		if (!_isInClosedList){
-
-	    		for (std::list<node *>::iterator it_open = open_list.begin(); it_open != open_list.end(); it_open++){
-	    			if ((*(*it_possible_movements)) == (*(*it_open))){
-	    				if ((*(*it_possible_movements)) < (*(*it_open))){
-	    					(*(*it_open)) = (*(*it_possible_movements));
-	    				}
-	    				_isInOpenList = true;
-	    				break ;
-	    			}
-	    		}
-    		}
-
-    		// (void)closed_list;
-
-    		if (_isInClosedList == false && _isInOpenList == false)
-    			open_list.push_front(*it_possible_movements);
-
-    		it_possible_movements++;
-    	}
-    }
-
-    void	Astar::remove_or_update_if_already_in_open_list(std::list<node *>& open_list){
-		// STEP 1 : ITERATE ON POSSIBLE_MOVEMENTS
-    	std::list<node *>::iterator it_possible_movements = possible_movements.begin();
-    	while (it_possible_movements != possible_movements.end()){
-    		bool occur = false;
-    		// STEP 2 : ITERATE ON OPEN_LIST TO CHECK IF THERE IS AN OCCURENCE
-    		for (std::list<node *>::iterator it_open = open_list.begin(); it_open != open_list.end(); it_open++){
-    			if ((*(*it_possible_movements)) == (*(*it_open))){
-    				if ((*(*it_possible_movements)) < (*(*it_open))){
-    					(*(*it_open)) = (*(*it_possible_movements));
-    				}
-    				occur = true;
-    				break ;
-    			}
-    		}
-    		if (occur == false){
-    			open_list.push_front(*it_possible_movements);
-    		}
-    		it_possible_movements++;
-    	}
-    }
-
-    void	Astar::remove_if_already_in_closed_list(std::list<node *>& closed_list){
-
-    	// STEP 1 : ITEERATE ON POSSIBLE MOVEMENTS
-    	std::list<node *>::iterator it_possible_movements = possible_movements.begin();
-    	while (it_possible_movements != possible_movements.end()){
-    		bool occur = false;
-
-    		// STEP 2 : ITERATE ON CLOSED_LIST TO CHECK IF THERE IS AN OCCURENCE
-    		for (std::list<node *>::const_iterator it_closed = closed_list.begin(); it_closed != closed_list.end(); it_closed++){
-    			if ((*(*it_possible_movements)) == (*(*it_closed))){
-    				if ((*(*it_possible_movements)) < (*(*it_closed))){
-    					//(*(*it_closed)) = (*(*it_possible_movements));
-                                        // possible_movements.erase(it_possible_movements);
-    					closed_list.erase(it_closed);
-    					// it_closed = closed_list.begin();
-    					// if (it_closed == closed_list.end())
-    						// return;
-    					// break;
-    				}
-    				else{
-    					possible_movements.erase(it_possible_movements);
-    					occur = true;
-    					break ;
-    				}
-    			}
-    		}
-    		if (occur == false){
-    			it_possible_movements++;
-    		}
-    	}
-    }
 
     node* Astar::search_moves_case(node *current, int x_blank, int y_blank, int x_mov, int y_mov){
 

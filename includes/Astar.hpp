@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/22 16:40:28 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/01 01:42:05 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/02 16:20:17 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,8 @@ class Astar
 		void	insertInList(node * current, std::list<node *>& list);
 		void	search_moves(node *current, std::list<node *>& open_list, std::list<node *> & closed_list);
 		node	*search_moves_case(node *current, int x, int y, int x_mov, int y_mov);
-		void	remove_or_update_if_already_in_open_list(std::list<node *>& open_list);
-		void	remove_if_already_in_closed_list(std::list<node *>& closed_list);
 		node 	*isNodeInList(node *current, std::list<node *> & list);
-
-                void	find_blank(node *current, int *x, int *y);
+		void	find_blank(node *current, int *x, int *y);
 		bool	is_solution(node *current);
 		void	rate_node(node *node);
 		int		manhattan_heuristic(node *node);
@@ -50,8 +47,6 @@ class Astar
 
 		bool	_isInOpenList;
 		bool	_isInClosedList;
-
-		void	checkOccurenceInOpenAndClosedLists(std::list<node *>& open_list, std::list<node *>& closed_list);
 
 		/* GETTERS */
 

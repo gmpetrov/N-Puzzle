@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:04:53 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/01 00:47:53 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/02 19:24:46 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ class NPuzzle
 		~NPuzzle(void);
 		NPuzzle &	operator=(NPuzzle const & rhs);
 		void		ft_usage(void);
-                void		resolve(char *file);
+		void		resolve(char *file);
 
 		/* GETTERS */
                 inline int getSize(void) const{
@@ -49,8 +49,13 @@ class NPuzzle
 		int			parser_is_map;
 		int			parser_line_counter;
 		void		check_if_space_exist(void);
-
 		bool		success;
+
+		/* N-Puzzle Generator */
+		void		generate(int size, int iterations);
+		node		*generateFinalState(int size, int iterations);
+		int			**generateFinalBoard(int size);
+		node 		*isNodeInList(node *current, std::list<node *> & list);
 
 		/* Algo */
 
@@ -71,6 +76,16 @@ class NPuzzle
 			private:
 				puzzle_exception() throw();
 		};
+
+		class 				Args{
+		public:
+			std::string		heuristic;
+			std::string 	file;
+			bool			isFile;
+			size_t			iterations;
+			size_t			size;
+		};
+
 	private:
 		int			_size;
 };

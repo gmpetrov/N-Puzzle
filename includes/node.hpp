@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:43 by gmp               #+#    #+#             */
-/*   Updated: 2015/06/30 23:20:47 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/02 16:16:36 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ class node
 
 		bool	is_equal(const node & rhs) const;
 		bool	is_not_equal(const node & rhs) const;
-                void	init_state(int **state, int size);
+		void	init_state(int **state, int size);
 		void	print_state(void);
 
                 void incrGeneration(){

@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:08:25 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/02 13:02:49 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/02 19:51:08 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,110 @@ NPuzzle &	NPuzzle::operator=(NPuzzle const & rhs){
 	return *this;
 }
 
+void		NPuzzle::generate(int size, int iterations){
+	node 	*board = generateFinalState(size, iterations);
+
+	board->print_state();
+}
+
+node		*NPuzzle::generateFinalState(int size, int iterations){
+	node 	*board = new node(generateFinalBoard(size), size);
+
+	if (iterations < 0)
+		iterations = rand() % 20;
+
+	std::cout << "iterations" << iterations << std::endl;
+
+	std::list<node *>	oldMoves;
+
+	oldMoves.push_back(board);
+
+	// LOOP UNTIL THE GIVEN ITERATION
+	for (int i = 0; i < iterations; i++){
+
+		// GET ALL POSSIBLE MOVEMENTS
+		std::list<node *> moves = algo.search_moves(board);
+
+		// DELETE THE PREVIOUS MOVE FROM THE LIST
+		for (std::list<node *>::iterator iter = moves.begin(); iter != moves.end(); iter++){
+			if (this->isNodeInList(*iter, oldMoves)){
+				moves.erase(iter);
+			}
+		}
+
+		if(moves.size() == 0){
+			std::cout << "Already made all possible movements" << std::endl;
+			return board;
+		}
+
+		// GET RANDOMLY ONE OF THEM
+		std::list<node *>::iterator it = moves.begin();
+
+		int next = rand() % (moves.size());
+		std::advance(it, next);
+
+		*board = **it;
+		oldMoves.push_back(board);
+
+	}
+	return board;
+}
+
+node 	*NPuzzle::isNodeInList(node *current, std::list<node *> & list){
+	for (std::list<node *>::iterator it = list.begin(); it != list.end(); ++it){
+		if (**it == *current){
+			return *it;
+		}
+	}
+	return NULL;
+}
+
+int		**NPuzzle::generateFinalBoard(int size){
+	int		counter = 1;
+	int		dimension = size;
+	int 	**board = new int*[size];
+
+	// ALLOCATE THE BOARD
+	for(int j = 0; j < size; ++j) {
+		board[j] = new int[size];
+		for(int i = 0; i < size; ++i) {
+			board[j][i] = 0;
+		}
+	}
+
+	int num_elements = (size * size);
+
+	// FILL THE BOARD WITH SNAIL SOLUTION ORDERING
+	while (counter < num_elements)
+	{
+		for (int x = size - dimension; x < dimension && (counter < num_elements); x++){
+			int y = size - dimension;
+			board[y][x] = counter;
+			counter++;
+		}
+		dimension -= 1;
+		for (int v = size - dimension; v <= dimension && (counter < num_elements); v++){
+			int x = dimension;
+			board[v][x] = counter;
+			counter++;
+		}
+		for (int x = dimension - 1; x >= (size - (dimension + 1)) && (counter < num_elements); x--){
+			int y = dimension;
+			board[y][x] = counter;
+			counter++;
+		}
+		for (int y = dimension - 1; y >= size - dimension && (counter < num_elements); y--){
+			int x = (size - dimension) - 1;
+			board[y][x] = counter;
+			counter++;
+		}
+	}
+	return board;
+}
+
 void		NPuzzle::check_if_space_exist(void){
 	for (int y = 0; y < this->_size; y++){
 		for (int x = 0; x < this->_size; x++){
-			// std::cout << this->parser_map[y][x] << std::endl;
 			if (this->parser_map[y][x] == 0)
 				return ;
 		}
