@@ -8,13 +8,13 @@ def make_puzzle(s, solvable, iterations):
 	def swap_empty(p):
 		idx = p.index(0)
 		poss = []
-		if idx - 1 >= 0:
+		if idx % s > 0:
 			poss.append(idx - 1)
-		if idx + 1 < len(p):
+		if idx % s < s - 1:
 			poss.append(idx + 1)
-		if idx - s >= 0:
+		if idx / s > 0:
 			poss.append(idx - s)
-		if idx + s < len(p):
+		if idx / s < s - 1:
 			poss.append(idx + s)
 		swi = random.choice(poss)
 		p[idx] = p[swi]

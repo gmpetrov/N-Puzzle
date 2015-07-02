@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:49 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/01 01:30:02 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/01 11:10:19 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ Astar &	Astar::operator=(Astar const & rhs){
 
 // FIND OCCURENCE IN A LIST
 
-node*				Astar::isNodeInList(node *current, std::list<node *> list){
+node*				Astar::isNodeInList(node *current, std::list<node *> & list){
 	for (std::list<node *>::iterator it = list.begin(); it != list.end(); ++it){
 		if (**it == *current && (*it)->_heuristic == current->_heuristic){
 			return *it;
@@ -267,10 +267,9 @@ void	Astar::search_moves(node *current, std::list<node *> & open_list, std::list
     }
 
     void	Astar::rate_node(node *node){
-	// int	result_heuristic = this->manhattan_heuristic(node);
+    	// node->_heuristic = manhattan_heuristic(node);
     	node->_heuristic = hamming_heuristic(node);
     	node->_rate = node->_heuristic + node->_generation;
-	// node->_rate = result_heuristic;
     }
 
     int		Astar::manhattan_heuristic(node *node){
