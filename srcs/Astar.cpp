@@ -6,14 +6,12 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:49 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/02 17:33:54 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/02 23:19:49 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "Astar.hpp"
-
-using namespace std;
 
 Astar::Astar(const Astar & src){
 	*this = src;
@@ -248,41 +246,31 @@ std::list<node *> Astar::search_moves(node * current){
     }
 
     void	print_it(node *node){
-    	std::cout << "RATE ZBRA = ";
-    	std::cout << node->_rate << std::endl;
     	node->print_state();
-    	std::cout << *node << std::endl;
+        std::cout << std::endl;
     }
 
     node	*Astar::best_move(std::list<node *> & open_list, std::list<node *> & closed_list){
+        (void)closed_list;
     	node *possible_movements_node;
-
-    	(void)closed_list;
-
-
-//    	std::sort(open_list.begin(), open_list.end());
     	possible_movements_node = *open_list.begin();
-    	// std::reverse(open_list.begin(), open_list.end());
     	open_list.erase(open_list.begin());
-    	// open_list.pop_front();
     	return possible_movements_node;
     }
 
     bool compare_generation(node *i, node *j) { return (i->_generation < j->_generation); }
 
-    void	Astar::get_path(node *current)
+    std::list<node *>	Astar::get_path(node *current)
     {
     	node *possible_movements_node = current;
     	std::list<node *> path;
+
     	while (possible_movements_node->_parent){
     		path.push_front(possible_movements_node);
     		possible_movements_node = possible_movements_node->_parent;
     	}
 
     	path.sort(compare_generation);
-    	//std::sort(path.begin(), path.end(), compare_generation);
-    	std::reverse(path.begin(), path.end());
     	for_each(path.begin(), path.end(), print_it);
-    	std::cout << "NUMBER OF STEP" << path.size() << std::endl;
-
+        return path;
     }

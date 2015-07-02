@@ -6,13 +6,11 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:08:25 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/02 19:51:08 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/02 23:36:58 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "NPuzzle.hpp"
-
-using namespace std;
 
 NPuzzle::NPuzzle() : parser_map(NULL){
 	this->_size = -42;
@@ -261,15 +259,19 @@ const char		*NPuzzle::puzzle_exception::what() const throw(){
 void NPuzzle::resolve(char *file){
 
 	bool success = false;
+	unsigned long  c_time	 = 0;
+	unsigned long  c_size  = 0;
+	unsigned long  maxSizeClosedList = 0;
 
 	// CHECK IF FILE EXIST AND IF IT'S A VALID MAP
-	if(!this->parse(file)){ cout << "unable to read input file" << endl; return; }
+	if(!this->parse(file)){ std::cout << "unable to read input file" << std::endl; return; }
 
 	// SET INITIAL STATE AS CURRENT STATE
 	node *current = new node(this->parser_map, this->_size);
 
-	cout << "input" << endl;
+	std::cout << "input" << std::endl;
 	current->print_state();
+	std::cout << std::endl;
 	algo.rate_node(current);
 
 	//LISTS USED IN ALGORITHM
@@ -279,6 +281,13 @@ void NPuzzle::resolve(char *file){
 	// Add initial node to open list
 	open_list.push_back(current);
 	while(!open_list.empty()){
+
+		// CALCULATE COMPLEXITY IN TIME (Total number of states ever selected in the "opened" set)
+		c_time = (open_list.size() > c_time ? open_list.size() : c_time);
+
+		// CALCULATE COMPLEXITY IN SIZE (Maximum number of states ever represented in memory at the same time)
+		maxSizeClosedList = (closed_list.size() > maxSizeClosedList ? closed_list.size() : maxSizeClosedList);
+		c_size = ((c_time + maxSizeClosedList) > c_size ? (c_size + maxSizeClosedList) : c_size);
 
 		// GET FIRST ELEMENT OF THE OPEN LIST AS CURRENT NODE
 			// std::sort(open_list.begin(), open_list.end());
@@ -324,9 +333,16 @@ void NPuzzle::resolve(char *file){
 
 	if(success)
 	{
-		algo.get_path(current);
-		std::cout << "FIND ONE" << std::endl;
+		std::list<node *> path = algo.get_path(current);
 		current->print_state();
+		node 	goal(generateFinalBoard(current->_size), current->_size);
+		std::cout << std::endl;
+		goal.print_state();
+		std::cout << std::endl << "\033[33m====> Success \033[0m" << std::endl;
+		std::cout << "\033[33;36m====> Number of moves : \033[33m" << path.size() << "\033[0m" << std::endl;
+		std::cout << "\033[33;36m====> Complexity in time : \033[33m" << c_time << "\033[0m" << std::endl;
+		std::cout << "\033[33;36m====> Complexity in size : \033[33m" << c_size << "\033[0m" << std::endl;
+
 	}
 	else
 	{

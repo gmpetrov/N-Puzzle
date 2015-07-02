@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:04:53 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/02 19:24:46 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/02 23:08:44 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ class NPuzzle
 		/* Algo */
 
 		Astar	algo;
+		node 	*goal;
 
 		template<typename T>
 		void		free_tab(T tab);

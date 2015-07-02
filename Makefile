@@ -45,5 +45,5 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all gdb clean fclean re
+.PHONY: all gdb clean fclean
 
