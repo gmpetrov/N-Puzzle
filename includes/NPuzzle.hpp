@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:04:53 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/03 10:01:00 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/03 10:39:36 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ class NPuzzle
 			std::string		heuristic;
 			std::string 	file;
 			bool			isFile;
+			bool			isGenerate;
 			size_t			iterations;
 			size_t			size;
 		};
