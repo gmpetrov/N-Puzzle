@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:49 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/03 13:50:08 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/03 14:30:34 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -325,6 +325,21 @@ std::list<node *> Astar::search_moves(node * current){
                 int x = (current->_size - dimension) - 1;
                 flat.push_back(current->_state[y][x]);
                 counter++;
+            }
+        }
+
+        // CHECKING VALUE OF EACH
+        for (int i = 0; i < static_cast<int>(flat.size()); i++){
+            bool occur = false;
+            for (int j = 0; j < static_cast<int>(flat.size()); j++){
+                if (flat[j] == i){
+                    occur = true;
+                    break ;
+                }
+            }
+            if (!occur){
+                std::cout << "Invalid Map" << std::endl;
+                exit(0);
             }
         }
 

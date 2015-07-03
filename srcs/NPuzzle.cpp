@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:08:25 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/03 13:48:34 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/03 14:28:03 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,9 +194,10 @@ void		NPuzzle::parser_check_line_size(char **tab){
 		this->free_tab<char **>(tab);
 	}
 
-	bool		NPuzzle::parse(char *file_to_parse){
-		std::string line;
-		std::ifstream file(file_to_parse);
+	bool				NPuzzle::parse(char *file_to_parse){
+		std::string 	line;
+		std::ifstream 	file(file_to_parse);
+		int 			nbLines = 0;
 
 		if (file.is_open()){
 			while (getline(file, line)){
@@ -204,9 +205,12 @@ void		NPuzzle::parser_check_line_size(char **tab){
 					continue ;
 				else{
 					this->parser_check_line(line);
+					nbLines++;
 				}
 			}
 			file.close();
+			if (nbLines != this->_size + 1)
+				throw NPuzzle::puzzle_exception("Invalid Map");
 			this->check_if_space_exist();
 			return true;
 		}
