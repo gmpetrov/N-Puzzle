@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:08:25 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/03 14:28:03 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/03 16:39:08 by gpetrov          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 NPuzzle::NPuzzle() : parser_map(NULL){
 	this->_size = -42;
 	this->parser_line_counter = 0;
+	this->parser_is_map = false;
 }
 
 NPuzzle::NPuzzle(int size) : parser_map(NULL), _size(size){

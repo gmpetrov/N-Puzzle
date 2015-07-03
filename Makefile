@@ -6,12 +6,12 @@
 #    By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/02/20 09:56:28 by gmp               #+#    #+#              #
-#    Updated: 2015/06/28 20:19:48 by gmp              ###   ########.fr        #
+#    Updated: 2015/07/03 16:49:02 by gpetrov          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME	= npuzzle
-SRCS	= $(shell find srcs -type f -print | grep "\.c")
+SRCS	= $(shell find srcs -type f -print | grep '\.cpp$$')
 OBJS	= $(SRCS:srcs/%.cpp=srcs/.obj/%.o)
 INC		= -I includes -I libft/includes
 FLAGS	= -Wall -Wextra -Werror -pedantic
