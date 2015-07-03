@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:07:03 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/03 12:11:10 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/03 14:33:21 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "NPuzzle.hpp"
 
 void		ft_usage(void){
-	std::cout << "\033[33m[USAGE] - ./npuzzle [-h <1:manhattan|2:hamming>] [-s size] [-i iteration] [-f file]\033[0m" << std::endl;
+	std::cout << "\033[33m[USAGE] - ./npuzzle [-h <1:manhattan|2:hamming|3:euclidean>] [-s size] [-i iteration] [-f file]\033[0m" << std::endl;
 	exit(0);
 }
 
