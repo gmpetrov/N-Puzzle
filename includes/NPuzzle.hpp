@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:04:53 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/02 23:08:44 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/03 10:01:00 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ class NPuzzle
 		~NPuzzle(void);
 		NPuzzle &	operator=(NPuzzle const & rhs);
 		void		ft_usage(void);
-		void		resolve(char *file);
+		void		resolve(node *node);
 
 		/* GETTERS */
                 inline int getSize(void) const{
@@ -52,8 +52,7 @@ class NPuzzle
 		bool		success;
 
 		/* N-Puzzle Generator */
-		void		generate(int size, int iterations);
-		node		*generateFinalState(int size, int iterations);
+		node        *generate(int size, int iterations);
 		int			**generateFinalBoard(int size);
 		node 		*isNodeInList(node *current, std::list<node *> & list);
 
@@ -72,7 +71,6 @@ class NPuzzle
 				puzzle_exception & operator=(puzzle_exception const & rhs) throw();
 				~puzzle_exception() throw();
 				virtual const char *what() const throw();
-
 				std::string			error;
 			private:
 				puzzle_exception() throw();
@@ -87,8 +85,8 @@ class NPuzzle
 			size_t			size;
 		};
 
-	private:
 		int			_size;
+	private:
 };
 
 #endif

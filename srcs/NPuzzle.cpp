@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:08:25 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/02 23:36:58 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/03 10:20:15 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,11 @@ NPuzzle &	NPuzzle::operator=(NPuzzle const & rhs){
 	return *this;
 }
 
-void		NPuzzle::generate(int size, int iterations){
-	node 	*board = generateFinalState(size, iterations);
-
-	board->print_state();
-}
-
-node		*NPuzzle::generateFinalState(int size, int iterations){
+node		*NPuzzle::generate(int size, int iterations){
 	node 	*board = new node(generateFinalBoard(size), size);
 
 	if (iterations < 0)
 		iterations = rand() % 20;
-
-	std::cout << "iterations" << iterations << std::endl;
 
 	std::list<node *>	oldMoves;
 
@@ -79,6 +71,7 @@ node		*NPuzzle::generateFinalState(int size, int iterations){
 		oldMoves.push_back(board);
 
 	}
+	board->_parent = NULL;
 	return board;
 }
 
@@ -256,18 +249,15 @@ const char		*NPuzzle::puzzle_exception::what() const throw(){
 }
 
 
-void NPuzzle::resolve(char *file){
+void NPuzzle::resolve(node *board){
 
 	bool success = false;
 	unsigned long  c_time	 = 0;
 	unsigned long  c_size  = 0;
 	unsigned long  maxSizeClosedList = 0;
 
-	// CHECK IF FILE EXIST AND IF IT'S A VALID MAP
-	if(!this->parse(file)){ std::cout << "unable to read input file" << std::endl; return; }
-
 	// SET INITIAL STATE AS CURRENT STATE
-	node *current = new node(this->parser_map, this->_size);
+	node *current = board;
 
 	std::cout << "input" << std::endl;
 	current->print_state();
@@ -293,9 +283,6 @@ void NPuzzle::resolve(char *file){
 			// std::sort(open_list.begin(), open_list.end());
 		current = open_list.front();
 
-		// if (current->_heuristic <= 1)
-		// 	current->print_state();
-
 		if (current->_heuristic <= 1){
 			success = true;
 			break ;
@@ -313,12 +300,8 @@ void NPuzzle::resolve(char *file){
 			// ITERATE ON ALL POSSIBLE MOVES
 			for(std::list<node *>::iterator move = successors.begin(); move != successors.end(); ++move){
 
-				// (*move)->print_state();
-				// std::cout << "_heuristic : " << (*move)->_heuristic << ", _rate : " << (*move)->_rate << std::endl;
-
 				//CHECKING FOR OCCURENCE ON THE CLOSED LIST
 				if (this->algo.isNodeInList(*move, closed_list)) { continue; }
-
 
 				//CHECKING FOR OCCURENCE ON THE OPEN LIST
 				node *nodeInOpenList = this->algo.isNodeInList(*move, open_list);

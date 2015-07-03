@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:07:03 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/02 19:09:05 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/03 10:02:13 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,13 +85,19 @@ int		main(int ac, char **av)
 	try{
 		if (args.isFile){
 
+			// CHECK IF FILE EXIST AND IF IT'S A VALID MAP
+			if(!puzzle.parse(const_cast<char *>(args.file.c_str()))){ std::cout << "unable to read input file" << std::endl; exit(0); }
+
 			// RESOLVE N-PUZZLE FROM THE GIVEN FILE
-			puzzle.resolve(const_cast<char *>(args.file.c_str()));
+			puzzle.resolve(new node(puzzle.parser_map, puzzle._size));
 		}
 		else if (args.size >= 3){
 
-			// GENERATE A N-PUZZLE WITH THE GIVEN SIZE
-			puzzle.generate(static_cast<int>(args.size), static_cast<int>(args.iterations));
+			// GENERATE A N-PUZZLE WITH THE GIVEN SIZE AND ITERATION
+			node *board = puzzle.generate(static_cast<int>(args.size), static_cast<int>(args.iterations));
+
+			// RESOLVE
+			puzzle.resolve(board);
 		}
 		else
 			ft_usage();
