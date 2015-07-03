@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:08:25 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/03 12:04:20 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/03 13:48:34 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -256,6 +256,9 @@ void NPuzzle::resolve(node *board){
 	unsigned long  c_size  = 0;
 	unsigned long  maxSizeClosedList = 0;
 
+	//CHECK SOLVABILITY OF INPUT NODE
+	if (!algo.isBoardSolvable(board)){ std::cout << "\033[33m====> \033[31mInput board is not solvable\033[0m" << std::endl; exit(0); }
+
 	// SET INITIAL STATE AS CURRENT STATE
 	node *current = board;
 
@@ -327,9 +330,5 @@ void NPuzzle::resolve(node *board){
 
 	}
 	else
-	{
-		algo.get_path(current);
 		std::cout << "FAILED" << std::endl;
-		current->print_state();
-	}
 }

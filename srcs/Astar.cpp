@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:49 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/03 12:11:49 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/03 13:50:08 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -294,4 +294,55 @@ std::list<node *> Astar::search_moves(node * current){
     	path.sort(compare_generation);
     	for_each(path.begin(), path.end(), print_it);
         return path;
+    }
+
+    int                     Astar::countInversions(node *current){
+        std::vector<int>    flat;
+        int                 counter = 1;
+        int                 dimension = current->_size;
+        int                 inversions = 0;
+
+        // CREATING A FLAT VESION OF THE BOARD
+        while (counter <= ((current->_size * current->_size)))
+        {
+            for (int x = current->_size - dimension; x < dimension; x++){
+                int y = current->_size - dimension;
+                flat.push_back(current->_state[y][x]);
+                counter++;
+            }
+            dimension -= 1;
+            for (int v = current->_size - dimension; v <= dimension; v++){
+                int x = dimension;
+                flat.push_back(current->_state[v][x]);
+                counter++;
+            }
+            for (int x = dimension - 1; x >= (current->_size - (dimension + 1)); x--){
+                int y = dimension;
+                flat.push_back(current->_state[y][x]);
+                counter++;
+            }
+            for (int y = dimension - 1; y >= current->_size - dimension; y--){
+                int x = (current->_size - dimension) - 1;
+                flat.push_back(current->_state[y][x]);
+                counter++;
+            }
+        }
+
+        // CHECKING INVERSION ON THE FLATED BOARD
+        for (size_t i = 0; i < flat.size(); i++){
+            for (size_t j = i + 1; j < flat.size(); j++){
+                if (flat[i] && flat[j] && flat[i] > flat[j])
+                    inversions++;
+            }
+        }
+        return inversions;
+    }
+
+    bool        Astar::isBoardSolvable(node *board){
+
+        // COUNT THE NUMBER OF INVERSION
+        int    inversions = countInversions(board);
+
+         // RETURN TRUE IF INVERSION IS EVEN
+        return (inversions % 2 == 0);
     }

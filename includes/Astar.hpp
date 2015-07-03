@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/22 16:40:28 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/03 12:09:40 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/03 13:23:39 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <algorithm>
 # include <list>
 # include <math.h>
+# include <vector>
 
 class Astar
 {
@@ -44,6 +45,8 @@ class Astar
 		void	getGoalPos(node *node, int *goal_x, int *goal_y, int to_find);
 		node	*best_move(std::list<node *> & open_list, std::list<node *> & closed_list);
 		std::list<node *>	get_path(node *current);
+		bool	isBoardSolvable(node *board);
+		int		countInversions(node *board);
 
 		std::list<node *>	possible_movements;
 
