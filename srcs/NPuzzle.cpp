@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 14:08:25 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/03 10:20:15 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/03 12:04:20 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,8 +295,6 @@ void NPuzzle::resolve(node *board){
 			// GET ALL POSSIBLE MOVES FROM THE CURRENT NODE
 			std::list<node *> successors = this->algo.search_moves(current);
 
-
-
 			// ITERATE ON ALL POSSIBLE MOVES
 			for(std::list<node *>::iterator move = successors.begin(); move != successors.end(); ++move){
 
@@ -322,6 +320,7 @@ void NPuzzle::resolve(node *board){
 		std::cout << std::endl;
 		goal.print_state();
 		std::cout << std::endl << "\033[33m====> Success \033[0m" << std::endl;
+		std::cout << "\033[33;36m====> Heuristic : \033[33m" << algo.heuristicType << "\033[0m" << std::endl;
 		std::cout << "\033[33;36m====> Number of moves : \033[33m" << path.size() << "\033[0m" << std::endl;
 		std::cout << "\033[33;36m====> Complexity in time : \033[33m" << c_time << "\033[0m" << std::endl;
 		std::cout << "\033[33;36m====> Complexity in size : \033[33m" << c_size << "\033[0m" << std::endl;

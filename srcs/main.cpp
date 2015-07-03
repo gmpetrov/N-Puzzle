@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:07:03 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/03 10:40:37 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/03 12:11:10 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ NPuzzle::Args 	checkArgs(int ac, char **av){
 				args.heuristic = "manhattan";
 			else if (value == "2" || value == "hamming")
 				args.heuristic = "hamming";
+			else if (value == "3" || value == "euclidean")
+				args.heuristic = "euclidean";
 			else
 				ft_usage();
 		}
@@ -87,6 +89,14 @@ int		main(int ac, char **av)
   	/* initialize random seed */
   	srand(time(NULL));
 	try{
+
+		// SETTING THE HEURISTIC
+		if (args.heuristic.empty())
+			puzzle.algo.heuristicType = "manhattan";
+		else
+			puzzle.algo.heuristicType = args.heuristic;
+
+		// CASE OF FILE INPUT
 		if (args.isFile){
 
 			// CHECK IF FILE EXIST AND IF IT'S A VALID MAP

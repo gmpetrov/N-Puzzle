@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/15 17:25:49 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/03 10:19:12 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/03 12:11:49 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,8 +144,12 @@ std::list<node *> Astar::search_moves(node * current){
     }
 
     void	Astar::rate_node(node *node){
-    	// node->_heuristic = manhattan_heuristic(node);
-    	node->_heuristic = hamming_heuristic(node);
+        if (this->heuristicType == "manhattan")
+    	   node->_heuristic = manhattan_heuristic(node);
+        else if (this->heuristicType == "hamming")
+    	   node->_heuristic = hamming_heuristic(node);
+        else if (this->heuristicType == "euclidean")
+            node->_heuristic = euclidean_heuristic(node);
     	node->_rate = node->_heuristic + node->_generation;
     }
 
@@ -200,6 +204,23 @@ std::list<node *> Astar::search_moves(node * current){
     		}
     	}
     	return result;
+    }
+
+    int     Astar::euclidean_heuristic(node *node){
+        int current_x;
+        int current_y;
+        int goal_x;
+        int goal_y;
+        int result = 0;
+
+        for (int counter = 1; counter < (node->_size * node->_size); counter++){
+            this->getCurrentPos(node, &current_x, &current_y, counter);
+            this->getGoalPos(node, &goal_x, &goal_y, counter);
+            int x = pow(goal_x - current_x, 2);
+            int y = pow(goal_y - current_y, 2);
+            result += (x + y);
+        }
+        return result;
     }
 
     void	Astar::getCurrentPos(node *node, int *current_x, int *current_y, int to_find){

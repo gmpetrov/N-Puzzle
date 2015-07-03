@@ -6,7 +6,7 @@
 /*   By: gmp <gmp@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/22 16:40:28 by gmp               #+#    #+#             */
-/*   Updated: 2015/07/02 23:17:39 by gmp              ###   ########.fr       */
+/*   Updated: 2015/07/03 12:09:40 by gmp              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <string>
 # include <algorithm>
 # include <list>
+# include <math.h>
 
 class Astar
 {
@@ -38,6 +39,7 @@ class Astar
 		void	rate_node(node *node);
 		int		manhattan_heuristic(node *node);
 		int		hamming_heuristic(node *node);
+		int 	euclidean_heuristic(node *node);
 		void	getCurrentPos(node *node, int *current_x, int *current_y, int to_find);
 		void	getGoalPos(node *node, int *goal_x, int *goal_y, int to_find);
 		node	*best_move(std::list<node *> & open_list, std::list<node *> & closed_list);
@@ -47,6 +49,7 @@ class Astar
 
 		bool	_isInOpenList;
 		bool	_isInClosedList;
+		std::string heuristicType;
 
 		/* GETTERS */
 
